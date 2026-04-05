@@ -6,7 +6,7 @@ export default function page() {
   const handleLogin = async () => {
     await authClient.signIn.social({
       provider: "google",
-      callbackURL: "/app",
+      callbackURL: "/home",
     });
   };
   return (
