@@ -33,7 +33,7 @@ export const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
         <div className="fixed inset-0 z-50 p-4 bg-white text-gray-900 flex flex-col items-center justify-center text-center">
             
             {/* Margins adjust based on screen size */}
-            <div className="mb-6 md:mb-8 animate-heartbeat">
+            <div className="mb-6 md:mb-8 animate-wobble">
                 <Image 
                     src="/Icon/Asset2.png" 
                     width={200} 

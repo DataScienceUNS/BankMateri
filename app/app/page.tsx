@@ -1,9 +1,9 @@
 "use client";
 import { authClient, useSession } from "@/lib/auth/client";
-import { Button, Card, Table } from "@heroui/react";
+import { Button, Input } from "@heroui/react";
 import { useRouter } from "next/navigation";
 
-export default function page() {
+export default function Page() {
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -11,64 +11,53 @@ export default function page() {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          router.push("/login"); // redirect to login page
+          router.push("/login");
         },
       },
     });
   };
 
   return (
-    <div className="tracking-tight">
-      <div className="mx-auto mt-[30vh] max-w-2xl ">
-        <Card variant="secondary">
-          <Card.Header>
-            <Card.Title>
-              Congratulations, you've successfully logged in 🎉
-            </Card.Title>
-            <Card.Description></Card.Description>
-          </Card.Header>
-          <Card.Content>
-            <Table>
-              <Table.ScrollContainer>
-                <Table.Content aria-label="Team members" className="w-full">
-                  <Table.Header>
-                    <Table.Column isRowHeader>Key</Table.Column>
-                    <Table.Column>Value</Table.Column>
-                  </Table.Header>
-                  <Table.Body>
-                    <Table.Row>
-                      <Table.Cell>ID</Table.Cell>
-                      <Table.Cell>{session?.user?.id}</Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>Username</Table.Cell>
-                      <Table.Cell>{session?.user?.name}</Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>Email</Table.Cell>
-                      <Table.Cell>{session?.user?.email}</Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>Profile</Table.Cell>
-                      <Table.Cell>
-                        <img
-                          src={session?.user?.image as string}
-                          alt="Profile"
-                        />
-                      </Table.Cell>
-                    </Table.Row>
-                  </Table.Body>
-                </Table.Content>
-              </Table.ScrollContainer>
-            </Table>
-          </Card.Content>
-          <Card.Footer className="mt-4 flex flex-col gap-2">
-            <Button className="w-full" type="submit" onPress={handleLogout}>
-              Log Out
-            </Button>
-          </Card.Footer>
-        </Card>
+    <>
+      {/* 1. SCROLLABLE CONTENT AREA
+        flex-1: Pushes the bottom bar to the end of the page if content is short.
+        pb-20: Adds padding at the bottom so the sticky nav doesn't cover your last item!
+      */}
+      <div className="flex-1 p-4 space-y-6 pb-20">
+        
+        <Input type="search" placeholder="Search..." className="w-full" />
+
+        {/* Generate lots of content to test the scrolling! */}
+        {Array.from({ length: 15 }).map((_, i) => (
+           <div key={i} className="p-6 bg-white rounded-xl shadow-sm border border-neutral-100">
+             Scrollable Content Block {i + 1}
+           </div>
+        ))}
+        
       </div>
-    </div>
+
+      {/* 2. STICKY BOTTOM NAVIGATION BAR
+        sticky bottom-0: Sticks to the bottom of the screen.
+        z-50: Ensures it floats ABOVE the scrolling content.
+        mt-auto: Pushes it to the bottom even if the page content is very short.
+      */}
+      <div className="sticky bottom-0 mt-auto w-full h-16 bg-blue-500 flex items-center justify-between text-white z-50 shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.1)]">
+        <div>
+          Home
+        </div>
+        <div>
+          Materi
+        </div>
+        <div>
+          Search
+        </div>
+        <div>
+          Dokumen
+        </div>
+        <div>
+          Profile
+        </div>
+      </div>
+    </>
   );
 }
