@@ -5,7 +5,7 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Protect main application routes fron unauthenticated access
-  if (pathname.startsWith("/app")) {
+  if (pathname.startsWith("/app") && process.env.IS_AUTH_REQUIRED === "true") {
     const sessionCookie = getSessionCookie(request);
     if (!sessionCookie) {
       const loginUrl = new URL("/login", request.url);

@@ -29,8 +29,10 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <section className="flex w-screen justify-center h-screen bg-neutral-200">
-          <div className="flex-1 md:max-w-130 bg-neutral-50">{children}</div>
+        <section className="flex justify-center w-screen h-screen bg-neutral-700">
+          <div className="flex-1 md:max-w-130 h-full bg-[#F5F5F5] relative overflow-hidden">
+            {children}
+          </div>
         </section>
       </body>
     </html>
