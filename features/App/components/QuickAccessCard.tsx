@@ -8,11 +8,13 @@ const AppQuickAccessCard = () => {
         <Card variant="default" key={index} className="flex flex-col">
           <Card.Header>
             <Card.Title className="text-base font-semibold flex items-center justify-between gap-2">
-              <span>Mata Kuliah {index + 1}</span>
+              <span className="truncate">Mata Kuliah {index + 1}</span>
               <Chip>PDF</Chip>
             </Card.Title>
-            <Card.Description>
-              Queue, List, Stack - Implementasi dalam kehidupan sehari-hari
+            <Card.Description className="line-clamp-3">
+              Queue, List, Stack - Implementasi dalam kehidupan sehari-hari.
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+              Consectetur, voluptatem.
             </Card.Description>
           </Card.Header>
           <Card.Footer>
