@@ -16,12 +16,12 @@ datasource db {
  * Enum Types
  */
 
-enum material_sources {
+enum Material_Sources {
   theory
   practicum
 }
 
-enum material_types {
+enum Material_Types {
   excersice
   material
   midterm_exam
@@ -29,10 +29,15 @@ enum material_types {
   responsi
 }
 
-enum report_status {
+enum Report_Status {
   pending
   approved
   rejected
+}
+
+enum User_Type {
+  student
+  lecture
 }
 
 /**
@@ -46,10 +51,51 @@ model User {
   profile_picture String?   @db.VarChar(255)
   gender          String?   @db.VarChar(16)
   born_date       DateTime? @db.Date
+  user_type       User_Type
   is_verified     Boolean   @db.Boolean
   created_at      DateTime  @db.Timestamptz()
   updated_at      DateTime  @db.Timestamptz()
   deleted_at      DateTime? @db.Timestamptz()
 
+  student                Student?
+  lecture                Lecture?
+  owned_external_links   ExternalLink[] @relation("ownedExternalLink")
+  created_external_links ExternalLink[] @relation("createdExternalLink")
+
   @@map("users")
+}
+
+model Student {
+  user_id       String @id @db.Uuid
+  nim           String @db.Char(8)
+  year_register Int    @db.SmallInt
+
+  user User @relation(fields: [user_id], references: [id])
+
+  @@map("students")
+}
+
+model Lecture {
+  user_id      String  @id @db.Uuid
+  nip          String? @db.VarChar(20)
+  phone_number String? @db.VarChar(25)
+
+  user User @relation(fields: [user_id], references: [id])
+
+  @@map("lectures")
+}
+
+model ExternalLink {
+  id            String    @id @db.Uuid
+  owner         User      @relation(fields: [owner_id], references: [id], name: "ownedExternalLink")
+  platform_name String    @db.VarChar(100)
+  url_target    String    @db.VarChar(255)
+  icon          String    @db.VarChar(255)
+  creator       User      @relation(fields: [creator_id], references: [id], name: "createdExternalLink")
+  created_at    DateTime  @db.Timestamptz()
+  updated_at    DateTime  @db.Timestamptz()
+  deleted_at    DateTime? @db.Timestamptz()
+
+  owner_id   String @db.Uuid
+  creator_id String @db.Uuid
 }
