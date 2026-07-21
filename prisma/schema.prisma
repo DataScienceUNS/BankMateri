@@ -40,27 +40,37 @@ enum User_Type {
   lecture
 }
 
+enum Access_Type {
+  guest
+  verified
+  supervisor
+  admin
+}
+
 /**
  * Table Model
  */
 
+// User Section
 model User {
-  id              String    @id @db.Uuid
-  sso_email       String    @db.VarChar(155)
-  full_name       String    @db.VarChar(155)
-  profile_picture String?   @db.VarChar(255)
-  gender          String?   @db.VarChar(16)
-  born_date       DateTime? @db.Date
-  user_type       User_Type
-  is_verified     Boolean   @db.Boolean
-  created_at      DateTime  @db.Timestamptz()
-  updated_at      DateTime  @db.Timestamptz()
-  deleted_at      DateTime? @db.Timestamptz()
+  id              String      @id @db.Uuid
+  sso_email       String      @db.VarChar(155)
+  full_name       String      @db.VarChar(155)
+  profile_picture String?     @db.VarChar(255)
+  gender          String?     @db.VarChar(16)
+  born_date       DateTime?   @db.Date
+  user_type       User_Type?
+  access_type     Access_Type @default(guest)
+  created_at      DateTime    @db.Timestamptz()
+  updated_at      DateTime    @db.Timestamptz()
+  deleted_at      DateTime?   @db.Timestamptz()
 
   student                Student?
   lecture                Lecture?
   owned_external_links   ExternalLink[] @relation("ownedExternalLink")
   created_external_links ExternalLink[] @relation("createdExternalLink")
+  uploaded_subjects      Subject[]
+  created_materials      Material[]
 
   @@map("users")
 }
@@ -98,4 +108,44 @@ model ExternalLink {
 
   owner_id   String @db.Uuid
   creator_id String @db.Uuid
+
+  @@map("external_links")
+}
+
+// Subject Section
+model Subject {
+  id            String    @id @db.Uuid
+  name          String    @db.VarChar(110)
+  slug          String    @db.VarChar(110)
+  keyword       String?   @db.VarChar(255)
+  thumbnail_url String?   @db.VarChar(255)
+  uploader      User      @relation(fields: [uploader_id], references: [id])
+  created_at    DateTime  @db.Timestamptz()
+  updated_at    DateTime  @db.Timestamptz()
+  deleted_at    DateTime? @db.Timestamptz()
+
+  uploader_id String @db.Uuid
+  userId      String @db.Uuid
+
+  @@map("subjects")
+}
+
+model Material {
+  id            String           @id @db.Uuid
+  // subject_class
+  title         String           @db.VarChar(155)
+  description   String?          @db.Text
+  content_url   String           @db.VarChar(500)
+  type          Material_Types
+  source        Material_Sources
+  academic_year Int              @db.SmallInt
+  visitor_count Int              @default(0)
+  uploader      User             @relation(fields: [uploader_id], references: [id])
+  created_at    DateTime         @db.Timestamptz()
+  updated_at    DateTime         @db.Timestamptz()
+  deleted_at    DateTime?        @db.Timestamptz()
+
+  uploader_id String @db.Uuid
+
+  @@map("materials")
 }
