@@ -65,13 +65,15 @@ model User {
   updated_at      DateTime    @db.Timestamptz()
   deleted_at      DateTime?   @db.Timestamptz()
 
-  student                Student?
-  lecture                Lecture?
-  owned_external_links   ExternalLink[]  @relation("ownedExternalLink")
-  created_external_links ExternalLink[]  @relation("createdExternalLink")
-  uploaded_subjects      Subject[]
-  created_materials      Material[]
-  created_class          Subject_Class[]
+  student                  Student?
+  lecture                  Lecture?
+  owned_external_links     ExternalLink[]   @relation("ownedExternalLink")
+  created_external_links   ExternalLink[]   @relation("createdExternalLink")
+  uploaded_subjects        Subject[]
+  created_materials        Material[]
+  created_class            SubjectClass[]
+  created_material_report  MaterialReport[] @relation("ReportedMaterialReport")
+  reviewed_material_report MaterialReport[] @relation("ReviewedMaterialReport")
 
   @@map("users")
 }
@@ -91,8 +93,8 @@ model Lecture {
   nip          String? @db.VarChar(20)
   phone_number String? @db.VarChar(25)
 
-  user        User            @relation(fields: [user_id], references: [id])
-  teach_class Subject_Class[]
+  user        User           @relation(fields: [user_id], references: [id])
+  teach_class SubjectClass[]
 
   @@map("lectures")
 }
@@ -126,13 +128,13 @@ model Subject {
   updated_at    DateTime  @db.Timestamptz()
   deleted_at    DateTime? @db.Timestamptz()
 
-  uploader_id String          @db.Uuid
-  class       Subject_Class[]
+  uploader_id String         @db.Uuid
+  class       SubjectClass[]
 
   @@map("subjects")
 }
 
-model Subject_Class {
+model SubjectClass {
   id            String   @id @db.Uuid
   class_code    String   @db.Char(1)
   subject       Subject  @relation(fields: [subject_id], references: [id])
@@ -153,7 +155,7 @@ model Subject_Class {
 
 model Material {
   id            String           @id @db.Uuid
-  subject_class Subject_Class    @relation(fields: [subject_class_id], references: [id])
+  subject_class SubjectClass     @relation(fields: [subject_class_id], references: [id])
   title         String           @db.VarChar(155)
   description   String?          @db.Text
   content_url   String           @db.VarChar(500)
@@ -166,8 +168,24 @@ model Material {
   updated_at    DateTime         @db.Timestamptz()
   deleted_at    DateTime?        @db.Timestamptz()
 
-  subject_class_id String @db.Uuid
-  uploader_id      String @db.Uuid
+  subject_class_id String           @db.Uuid
+  uploader_id      String           @db.Uuid
+  report_card      MaterialReport[]
 
   @@map("materials")
+}
+
+model MaterialReport {
+  id          String        @id @db.Uuid
+  material    Material      @relation(fields: [material_id], references: [id])
+  reporter    User          @relation(fields: [reporter_id], references: [id], name: "ReportedMaterialReport")
+  reviewer    User          @relation(fields: [reviewer_id], references: [id], name: "ReviewedMaterialReport")
+  reason      String        @db.VarChar()
+  description String        @db.Text
+  status      Report_Status
+  created_at  DateTime      @db.Timestamptz()
+
+  material_id String @db.Uuid
+  reporter_id String @db.Uuid
+  reviewer_id String @db.Uuid
 }
