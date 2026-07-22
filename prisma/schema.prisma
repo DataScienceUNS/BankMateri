@@ -83,7 +83,9 @@ model Student {
   nim           String @db.Char(8)
   year_register Int    @db.SmallInt
 
-  user User @relation(fields: [user_id], references: [id])
+  user           User                 @relation(fields: [user_id], references: [id])
+  class_assisted PracticumAssistant[]
+  class_enrolled ClassHistoryTracks[]
 
   @@map("students")
 }
@@ -104,7 +106,7 @@ model ExternalLink {
   owner         User      @relation(fields: [owner_id], references: [id], name: "ownedExternalLink")
   platform_name String    @db.VarChar(100)
   url_target    String    @db.VarChar(255)
-  icon          String    @db.VarChar(255)
+  icon          String?   @db.VarChar(255)
   creator       User      @relation(fields: [creator_id], references: [id], name: "createdExternalLink")
   created_at    DateTime  @db.Timestamptz()
   updated_at    DateTime  @db.Timestamptz()
@@ -114,6 +116,30 @@ model ExternalLink {
   creator_id String @db.Uuid
 
   @@map("external_links")
+}
+
+model PracticumAssistant {
+  subject_class SubjectClass @relation(fields: [subject_class_id], references: [id])
+  assistant     Student      @relation(fields: [student_id], references: [user_id])
+
+  subject_class_id String @db.Uuid
+  student_id       String @db.Uuid
+
+  @@id([subject_class_id, student_id])
+  @@map("practicum_assistant")
+}
+
+model ClassHistoryTracks {
+  class      SubjectClass @relation(fields: [class_id], references: [id])
+  student    Student      @relation(fields: [student_id], references: [user_id])
+  created_at DateTime     @db.Timestamptz()
+  ended_at   DateTime     @db.Timestamptz()
+
+  class_id   String @db.Uuid
+  student_id String @db.Uuid
+
+  @@id([class_id, student_id])
+  @@map("class_history_tracks")
 }
 
 // Subject Section
@@ -144,10 +170,12 @@ model SubjectClass {
   creator       User     @relation(fields: [creator_id], references: [id])
   created_at    DateTime @db.Timestamptz()
 
-  subject_id    String     @db.Uuid
-  instructor_id String     @db.Uuid
-  creator_id    String     @db.Uuid
-  materials     Material[]
+  subject_id              String               @db.Uuid
+  instructor_id           String               @db.Uuid
+  creator_id              String               @db.Uuid
+  materials               Material[]
+  practicum_assistant     PracticumAssistant[]
+  listed_on_student_track ClassHistoryTracks[]
 
   @@unique([class_code, subject_id, academic_year, is_even_term])
   @@map("subject_classes")
@@ -188,4 +216,6 @@ model MaterialReport {
   material_id String @db.Uuid
   reporter_id String @db.Uuid
   reviewer_id String @db.Uuid
+
+  @@map("material_reports")
 }
