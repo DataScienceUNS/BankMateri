@@ -11,3 +11,211 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+/**
+ * Enum Types
+ */
+
+enum Material_Sources {
+  theory
+  practicum
+}
+
+enum Material_Types {
+  excersice
+  material
+  midterm_exam
+  final_exam
+  responsi
+}
+
+enum Report_Status {
+  pending
+  approved
+  rejected
+}
+
+enum User_Type {
+  student
+  lecture
+}
+
+enum Access_Type {
+  guest
+  verified
+  supervisor
+  admin
+}
+
+/**
+ * Table Model
+ */
+
+// User Section
+model User {
+  id              String      @id @db.Uuid
+  sso_email       String      @db.VarChar(155)
+  full_name       String      @db.VarChar(155)
+  profile_picture String?     @db.VarChar(255)
+  gender          String?     @db.VarChar(16)
+  born_date       DateTime?   @db.Date
+  user_type       User_Type?
+  access_type     Access_Type @default(guest)
+  created_at      DateTime    @db.Timestamptz()
+  updated_at      DateTime    @db.Timestamptz()
+  deleted_at      DateTime?   @db.Timestamptz()
+
+  student                  Student?
+  lecture                  Lecture?
+  owned_external_links     ExternalLink[]   @relation("ownedExternalLink")
+  created_external_links   ExternalLink[]   @relation("createdExternalLink")
+  uploaded_subjects        Subject[]
+  created_materials        Material[]
+  created_class            SubjectClass[]
+  created_material_report  MaterialReport[] @relation("ReportedMaterialReport")
+  reviewed_material_report MaterialReport[] @relation("ReviewedMaterialReport")
+
+  @@map("users")
+}
+
+model Student {
+  user_id       String @id @db.Uuid
+  nim           String @db.Char(8)
+  year_register Int    @db.SmallInt
+
+  user           User                 @relation(fields: [user_id], references: [id])
+  class_assisted PracticumAssistant[]
+  class_enrolled ClassHistoryTracks[]
+
+  @@map("students")
+}
+
+model Lecture {
+  user_id      String  @id @db.Uuid
+  nip          String? @db.VarChar(20)
+  phone_number String? @db.VarChar(25)
+
+  user        User           @relation(fields: [user_id], references: [id])
+  teach_class SubjectClass[]
+
+  @@map("lectures")
+}
+
+model ExternalLink {
+  id            String    @id @db.Uuid
+  owner         User      @relation(fields: [owner_id], references: [id], name: "ownedExternalLink")
+  platform_name String    @db.VarChar(100)
+  url_target    String    @db.VarChar(255)
+  icon          String?   @db.VarChar(255)
+  creator       User      @relation(fields: [creator_id], references: [id], name: "createdExternalLink")
+  created_at    DateTime  @db.Timestamptz()
+  updated_at    DateTime  @db.Timestamptz()
+  deleted_at    DateTime? @db.Timestamptz()
+
+  owner_id   String @db.Uuid
+  creator_id String @db.Uuid
+
+  @@map("external_links")
+}
+
+model PracticumAssistant {
+  subject_class SubjectClass @relation(fields: [subject_class_id], references: [id])
+  assistant     Student      @relation(fields: [student_id], references: [user_id])
+
+  subject_class_id String @db.Uuid
+  student_id       String @db.Uuid
+
+  @@id([subject_class_id, student_id])
+  @@map("practicum_assistant")
+}
+
+model ClassHistoryTracks {
+  class      SubjectClass @relation(fields: [class_id], references: [id])
+  student    Student      @relation(fields: [student_id], references: [user_id])
+  created_at DateTime     @db.Timestamptz()
+  ended_at   DateTime     @db.Timestamptz()
+
+  class_id   String @db.Uuid
+  student_id String @db.Uuid
+
+  @@id([class_id, student_id])
+  @@map("class_history_tracks")
+}
+
+// Subject Section
+model Subject {
+  id            String    @id @db.Uuid
+  name          String    @db.VarChar(110)
+  slug          String    @db.VarChar(110)
+  keyword       String?   @db.VarChar(255)
+  thumbnail_url String?   @db.VarChar(255)
+  uploader      User      @relation(fields: [uploader_id], references: [id])
+  created_at    DateTime  @db.Timestamptz()
+  updated_at    DateTime  @db.Timestamptz()
+  deleted_at    DateTime? @db.Timestamptz()
+
+  uploader_id String         @db.Uuid
+  class       SubjectClass[]
+
+  @@map("subjects")
+}
+
+model SubjectClass {
+  id            String   @id @db.Uuid
+  class_code    String   @db.Char(1)
+  subject       Subject  @relation(fields: [subject_id], references: [id])
+  instructor    Lecture  @relation(fields: [instructor_id], references: [user_id])
+  academic_year Int      @db.SmallInt
+  is_even_term  Boolean  @db.Boolean
+  creator       User     @relation(fields: [creator_id], references: [id])
+  created_at    DateTime @db.Timestamptz()
+
+  subject_id              String               @db.Uuid
+  instructor_id           String               @db.Uuid
+  creator_id              String               @db.Uuid
+  materials               Material[]
+  practicum_assistant     PracticumAssistant[]
+  listed_on_student_track ClassHistoryTracks[]
+
+  @@unique([class_code, subject_id, academic_year, is_even_term])
+  @@map("subject_classes")
+}
+
+model Material {
+  id            String           @id @db.Uuid
+  subject_class SubjectClass     @relation(fields: [subject_class_id], references: [id])
+  title         String           @db.VarChar(155)
+  description   String?          @db.Text
+  content_url   String           @db.VarChar(500)
+  type          Material_Types
+  source        Material_Sources
+  academic_year Int              @db.SmallInt
+  visitor_count Int              @default(0)
+  uploader      User             @relation(fields: [uploader_id], references: [id])
+  created_at    DateTime         @db.Timestamptz()
+  updated_at    DateTime         @db.Timestamptz()
+  deleted_at    DateTime?        @db.Timestamptz()
+
+  subject_class_id String           @db.Uuid
+  uploader_id      String           @db.Uuid
+  report_card      MaterialReport[]
+
+  @@map("materials")
+}
+
+model MaterialReport {
+  id          String        @id @db.Uuid
+  material    Material      @relation(fields: [material_id], references: [id])
+  reporter    User          @relation(fields: [reporter_id], references: [id], name: "ReportedMaterialReport")
+  reviewer    User          @relation(fields: [reviewer_id], references: [id], name: "ReviewedMaterialReport")
+  reason      String        @db.VarChar()
+  description String        @db.Text
+  status      Report_Status
+  created_at  DateTime      @db.Timestamptz()
+
+  material_id String @db.Uuid
+  reporter_id String @db.Uuid
+  reviewer_id String @db.Uuid
+
+  @@map("material_reports")
+}
