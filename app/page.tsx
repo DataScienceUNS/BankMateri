@@ -1,9 +1,11 @@
 import React from 'react';
+import ButtonTest from "@/modules/shared/components/ButtonTest";
 
 const page = () => {
     return (
         <div>
-          Hello World
+            Hello World
+            <ButtonTest/>
         </div>
     );
 };
