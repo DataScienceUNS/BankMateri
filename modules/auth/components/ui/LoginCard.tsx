@@ -5,15 +5,20 @@ import WarningFillIcon from '@iconify-react/ph/warning-fill';
 import GoogleIcon from '@iconify-react/selfhst/google';
 import {Button, Spinner} from "@heroui/react";
 import {cn} from "@heroui/styles";
+import {googleRequestUrl} from "@/modules/auth/actions/googleRequestUrl";
+import {redirect} from "next/navigation";
 
 const LoginCard = () => {
     const [isLoading, setIsLoading] = React.useState(false);
-    const onLoginAction = () => {
+    const onLoginAction = async () => {
         setIsLoading(true)
-        console.log("Login Action")
-        setTimeout(() => {
-            setIsLoading(false)
-        }, 2000)
+        const response = await googleRequestUrl()
+        if (response.success) {
+            redirect(response.data.authorizeUrl)
+        } else {
+            console.log(response.error)
+        }
+        setIsLoading(false)
     }
 
     return (
@@ -25,7 +30,7 @@ const LoginCard = () => {
                     <p className="text-neutral-700 leading-5">Sign in to unlock your campus materials, save your favorites, and upload your own resources.</p>
                 </div>
                 <Button className="bg-black w-full py-6 flex gap-4" onPress={onLoginAction} isPending={isLoading}>
-                    { !isLoading ? <GoogleIcon width="20" /> : <Spinner color="current"/>}
+                    { isLoading ? <Spinner color="current"/>  : <GoogleIcon width="20" />}
                     Continue with Google
                 </Button>
                 <div className={cn('bg-yellow-50 border border-yellow-500 rounded-xl', 'text-yellow-900 text-sm font-normal', 'mt-5 py-3 px-5', 'flex gap-2 items-center')}>
