@@ -3,10 +3,19 @@ import React from 'react';
 import Image from "next/image";
 import WarningFillIcon from '@iconify-react/ph/warning-fill';
 import GoogleIcon from '@iconify-react/selfhst/google';
-import {Button} from "@heroui/react";
+import {Button, Spinner} from "@heroui/react";
 import {cn} from "@heroui/styles";
 
 const LoginCard = () => {
+    const [isLoading, setIsLoading] = React.useState(false);
+    const onLoginAction = () => {
+        setIsLoading(true)
+        console.log("Login Action")
+        setTimeout(() => {
+            setIsLoading(false)
+        }, 2000)
+    }
+
     return (
         <div className={cn('bg-white border border-neutral-200 rounded-2xl', 'w-124 py-8 px-10', 'flex flex-col gap-20')}>
             <div>
@@ -15,8 +24,8 @@ const LoginCard = () => {
                     <h1 className="text-neutral-800 text-xl">Welcome, Future Top Scorer</h1>
                     <p className="text-neutral-700 leading-5">Sign in to unlock your campus materials, save your favorites, and upload your own resources.</p>
                 </div>
-                <Button className="bg-black w-full py-6 flex gap-4">
-                    <GoogleIcon width="20" />
+                <Button className="bg-black w-full py-6 flex gap-4" onPress={onLoginAction} isPending={isLoading}>
+                    { !isLoading ? <GoogleIcon width="20" /> : <Spinner color="current"/>}
                     Continue with Google
                 </Button>
                 <div className={cn('bg-yellow-50 border border-yellow-500 rounded-xl', 'text-yellow-900 text-sm font-normal', 'mt-5 py-3 px-5', 'flex gap-2 items-center')}>
