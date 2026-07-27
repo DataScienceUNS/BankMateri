@@ -1,11 +1,12 @@
 "use server"
 
 import {createAction} from "@/utils/actions/create-action";
-import {GoogleCallbackParams} from "@/modules/shared/types/GoogleCallbackParams";
+import {GoogleCallbackParams} from "@/modules/auth/types/GoogleCallbackParams";
 import {redis} from "@/utils/databases/redis";
 import {ValidationError} from "@/utils/errors/app-error";
 import {googleProvider} from "@/modules/auth/providers/google";
-import {GoogleAccountInformation} from "@/modules/shared/types/GoogleAccountInformation";
+import {GoogleAccountInformation} from "@/modules/auth/types/GoogleAccountInformation";
+import {upsertAccount} from "@/modules/account/repositories/upsertAccount";
 
 export const googleCallbackHandler = createAction(
     async (params: GoogleCallbackParams) => {
@@ -26,9 +27,10 @@ export const googleCallbackHandler = createAction(
         })
 
         const userData = await response.json() as GoogleAccountInformation
+        const createdAccount = upsertAccount(userData)
 
         return {
-            user_data: userData,
+            user_data: createdAccount,
         }
     }
 )

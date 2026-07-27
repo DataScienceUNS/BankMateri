@@ -1,6 +1,6 @@
 import React from 'react';
 import {PageProps} from "@/modules/shared/types/PageProps";
-import {GoogleCallbackParams} from "@/modules/shared/types/GoogleCallbackParams";
+import {GoogleCallbackParams} from "@/modules/auth/types/GoogleCallbackParams";
 import {googleCallbackHandler} from "@/modules/auth/actions/googleCallbackHandler";
 
 const page = async ({searchParams}: PageProps) => {
