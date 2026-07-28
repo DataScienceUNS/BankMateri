@@ -7,6 +7,8 @@ import {ValidationError} from "@/utils/errors/app-error";
 import {googleProvider} from "@/modules/auth/providers/google";
 import {GoogleAccountInformation} from "@/modules/auth/types/GoogleAccountInformation";
 import {upsertAccount} from "@/modules/account/repositories/upsertAccount";
+import {createNewUserSession} from "@/modules/auth/repositories/createNewUserSession";
+import {unwrap} from "@/utils/actions/unwrap-action";
 
 export const googleCallbackHandler = createAction(
     async (params: GoogleCallbackParams) => {
@@ -27,10 +29,17 @@ export const googleCallbackHandler = createAction(
         })
 
         const userData = await response.json() as GoogleAccountInformation
-        const createdAccount = upsertAccount(userData)
+        const createdAccount = unwrap(await upsertAccount(userData))
+        const createdSession = await createNewUserSession(createdAccount, {
+            ipAddress: "192.168.1.1",
+            deviceType: "desktop",
+            browserVersion: "Chrome 123",
+            osVersion: "Windows 10",
+            userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
+        })
 
         return {
-            user_data: createdAccount,
+            user_data: createdSession,
         }
     }
 )

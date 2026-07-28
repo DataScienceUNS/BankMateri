@@ -16,6 +16,7 @@ const page = async ({searchParams}: PageProps) => {
 
     const response = await googleCallbackHandler(allParams)
     if (!response.success) console.log(response.error)
+    console.log(response)
 
     return (
         <div>
