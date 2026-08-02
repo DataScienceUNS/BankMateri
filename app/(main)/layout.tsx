@@ -30,8 +30,10 @@ const layout = ({children}: Readonly<{ children: React.ReactNode }>) => {
             </div>
             <div className="flex w-full mt-15">
                 <AppSidebar/>
-                <div className="flex-1">
-                    {children}
+                <div className="flex-1 flex justify-center">
+                    <div className="bg-red-500 w-290">
+                        {children}
+                    </div>
                 </div>
             </div>
         </SidebarProvider>
