@@ -4,8 +4,7 @@ import {Test} from "@/app/dump/Test";
 
 const page = () => {
     return (
-        <div>
-            Hello World
+        <div className={"h-full w-full"}>
             <h1>
                 <Test/>
             </h1>
