@@ -22,17 +22,21 @@ export function createAction<TArgs extends unknown[], TResult>(
                     status: err.status,
                     message: err.message,
                     error: {
-                        description: err.description,
+                        description: err.description || err.message,
                     },
                 };
             }
+
+            const errorMessage = err instanceof Error ? err.message : String(err);
+            const errorStack = err instanceof Error ? err.stack : undefined;
 
             return {
                 success: false,
                 status: 500,
                 message: "Internal Server Error",
                 error: {
-                    description: "Unexpected error occurred.",
+                    description: errorMessage,
+                    ...(process.env.NODE_ENV === "development" && { stack: errorStack }),
                 },
             };
         }

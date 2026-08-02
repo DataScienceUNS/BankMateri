@@ -1,15 +1,17 @@
 "use server"
 
-import {createAction} from "@/utils/actions/create-action";
-import {GoogleCallbackParams} from "@/modules/auth/types/GoogleCallbackParams";
-import {redis} from "@/utils/databases/redis";
-import {ValidationError} from "@/utils/errors/app-error";
-import {googleProvider} from "@/modules/auth/providers/google";
-import {GoogleAccountInformation} from "@/modules/auth/types/GoogleAccountInformation";
-import {upsertAccount} from "@/modules/account/repositories/upsertAccount";
-import {createNewUserSession} from "@/modules/auth/repositories/createNewUserSession";
-import {unwrap} from "@/utils/actions/unwrap-action";
 import {getUserAnalyticsServer} from "@/modules/shared/utils/userAnalytics.server";
+import {googleProvider} from "@/modules/auth/providers/google";
+import {createAction} from "@/utils/actions/create-action";
+import {cookies} from "next/headers";
+import {unwrap} from "@/utils/actions/unwrap-action";
+import {createNewUserSession} from "@/modules/auth/repositories/createNewUserSession";
+import {upsertAccount} from "@/modules/account/repositories/upsertAccount";
+import {redis} from "@/utils/databases/redis";
+import {GoogleAccountInformation} from "@/modules/auth/types/GoogleAccountInformation";
+import {GoogleCallbackParams} from "@/modules/auth/types/GoogleCallbackParams";
+import {ValidationError} from "@/utils/errors/app-error";
+import {SignJWT} from "jose";
 
 export const googleCallbackHandler = createAction(
     async (params: GoogleCallbackParams) => {
@@ -42,8 +44,19 @@ export const googleCallbackHandler = createAction(
             userAgent: userHeaderInformation.userAgent
         }))
 
+        const jwtSecret = new TextEncoder().encode(process.env.JWT_SECRET as string)
+        const token = await new SignJWT(createdSession).setProtectedHeader({alg: "HS256"}).setIssuedAt().setExpirationTime('30d').sign(jwtSecret)
+        const cookieStore = await cookies();
+        cookieStore.set('token', token, {
+            httpOnly: true,
+            secure: process.env.APP_STATE === 'production',
+            sameSite: 'lax',
+            path: '/',
+            maxAge: 60 * 60 * 24 * 30, // 1 Month (30 Days)
+        })
+
         return {
-            user_data: createdSession,
+            message: "Login successful. Welcome!",
         }
     }
 )
