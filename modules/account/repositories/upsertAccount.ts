@@ -10,11 +10,12 @@ export const upsertAccount = createAction(
                 sso_email: account.email
             },
             update: {
-                full_name: account.given_name + account.family_name
+                full_name: `${account.given_name} ${account.family_name}`,
+                profile_picture: account.picture
             },
             create: {
                 sso_email: account.email,
-                full_name: account.given_name + account.family_name,
+                full_name: `${account.given_name} ${account.family_name}`,
                 profile_picture: account.picture,
                 access_type: "guest",
             }
