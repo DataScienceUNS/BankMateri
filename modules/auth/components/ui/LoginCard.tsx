@@ -1,19 +1,22 @@
 "use client"
 import React from 'react';
 import Image from "next/image";
-import {Button, Spinner} from "@heroui/react";
-import {cn} from "@heroui/styles";
 import {googleRequestUrl} from "@/modules/auth/actions/googleRequestUrl";
-import {redirect} from "next/navigation";
 import {Icon} from "@/utils/styles/iconify";
+import { Button } from "@/modules/shadcn/ui/button";
+import { Spinner } from "@/modules/shadcn/ui/spinner";
+import {cn} from "@/modules/shadcn/utils";
+import {useRouter} from "next/navigation";
 
 const LoginCard = () => {
+    const router = useRouter();
+
     const [isLoading, setIsLoading] = React.useState(false);
     const onLoginAction = async () => {
         setIsLoading(true)
         const response = await googleRequestUrl()
         if (response.success) {
-            redirect(response.data.authorizeUrl)
+            router.push(response.data.authorizeUrl)
         } else {
             console.log(response.error)
         }
@@ -28,8 +31,8 @@ const LoginCard = () => {
                     <h1 className="text-neutral-800 text-xl">Welcome, Future Top Scorer</h1>
                     <p className="text-neutral-700 leading-5">Sign in to unlock your campus materials, save your favorites, and upload your own resources.</p>
                 </div>
-                <Button className="bg-black w-full py-6 flex gap-4" onPress={onLoginAction} isPending={isLoading}>
-                    { !isLoading ? <Icon icon="selfhst:google" width="20" /> : <Spinner color="current"/> }
+                <Button className={cn('bg-black w-full py-5 flex gap-4', 'hover:bg-neutral-800 cursor-pointer')} onClick={onLoginAction} disabled={isLoading}>
+                    { !isLoading ? <Icon icon="selfhst:google" width="20" /> : <Spinner/> }
                     Continue with Google
                 </Button>
                 <div className={cn('bg-yellow-50 border border-yellow-500 rounded-xl', 'text-yellow-900 text-sm font-normal', 'mt-5 py-3 px-5', 'flex gap-2 items-center')}>

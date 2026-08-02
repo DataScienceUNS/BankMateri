@@ -1,11 +1,10 @@
 "use client"
 import React from 'react';
-import {Button} from "@heroui/react";
 
 const ButtonTest = () => {
     return (
         <div>
-            <Button>Testing</Button>
+            <button>Testing</button>
         </div>
     );
 };
