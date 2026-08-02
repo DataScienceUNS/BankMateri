@@ -47,13 +47,6 @@ enum Access_Type {
   admin
 }
 
-enum Device_Type {
-  mobile
-  tablet
-  desktop
-  unknown
-}
-
 /**
  * Table Model
  */
@@ -127,15 +120,15 @@ model ExternalLink {
 }
 
 model Session {
-  id              String      @id @default(uuid(7)) @db.Uuid
-  user            User        @relation(references: [id], fields: [user_id])
-  user_agent      String      @db.VarChar(255)
-  os_version      String?     @db.VarChar(115)
-  browser_version String?     @db.VarChar(115)
-  device_type     Device_Type @default(unknown)
-  ip_address      String      @db.VarChar(45)
-  logged_in_at    DateTime    @db.Timestamptz()
-  logged_out_at   DateTime?   @db.Timestamptz()
+  id              String    @id @default(uuid(7)) @db.Uuid
+  user            User      @relation(references: [id], fields: [user_id])
+  user_agent      String    @db.VarChar(255)
+  os_version      String?   @db.VarChar(115)
+  browser_version String?   @db.VarChar(115)
+  device_type     String?   @db.VarChar(50)
+  ip_address      String    @db.VarChar(45)
+  logged_in_at    DateTime  @db.Timestamptz()
+  logged_out_at   DateTime? @db.Timestamptz()
 
   user_id String @db.Uuid
 
