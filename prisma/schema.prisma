@@ -4,7 +4,7 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../app/generated/prisma"
 }
 
@@ -53,22 +53,23 @@ enum Access_Type {
 
 // User Section
 model User {
-  id              String      @id @db.Uuid
-  sso_email       String      @db.VarChar(155)
+  id              String      @id @default(uuid(7)) @db.Uuid
+  sso_email       String      @unique @db.VarChar(155)
   full_name       String      @db.VarChar(155)
   profile_picture String?     @db.VarChar(255)
   gender          String?     @db.VarChar(16)
   born_date       DateTime?   @db.Date
   user_type       User_Type?
   access_type     Access_Type @default(guest)
-  created_at      DateTime    @db.Timestamptz()
-  updated_at      DateTime    @db.Timestamptz()
+  created_at      DateTime    @default(now()) @db.Timestamptz()
+  updated_at      DateTime    @updatedAt @db.Timestamptz()
   deleted_at      DateTime?   @db.Timestamptz()
 
   student                  Student?
   lecture                  Lecture?
   owned_external_links     ExternalLink[]   @relation("ownedExternalLink")
   created_external_links   ExternalLink[]   @relation("createdExternalLink")
+  sessions                 Session[]
   uploaded_subjects        Subject[]
   created_materials        Material[]
   created_class            SubjectClass[]
@@ -102,20 +103,36 @@ model Lecture {
 }
 
 model ExternalLink {
-  id            String    @id @db.Uuid
+  id            String    @id @default(uuid(7)) @db.Uuid
   owner         User      @relation(fields: [owner_id], references: [id], name: "ownedExternalLink")
   platform_name String    @db.VarChar(100)
   url_target    String    @db.VarChar(255)
   icon          String?   @db.VarChar(255)
   creator       User      @relation(fields: [creator_id], references: [id], name: "createdExternalLink")
-  created_at    DateTime  @db.Timestamptz()
-  updated_at    DateTime  @db.Timestamptz()
+  created_at    DateTime  @default(now()) @db.Timestamptz()
+  updated_at    DateTime  @updatedAt @db.Timestamptz()
   deleted_at    DateTime? @db.Timestamptz()
 
   owner_id   String @db.Uuid
   creator_id String @db.Uuid
 
   @@map("external_links")
+}
+
+model Session {
+  id              String    @id @default(uuid(7)) @db.Uuid
+  user            User      @relation(references: [id], fields: [user_id])
+  user_agent      String    @db.VarChar(255)
+  os_version      String?   @db.VarChar(115)
+  browser_version String?   @db.VarChar(115)
+  device_type     String?   @db.VarChar(50)
+  ip_address      String    @db.VarChar(45)
+  logged_in_at    DateTime  @db.Timestamptz()
+  logged_out_at   DateTime? @db.Timestamptz()
+
+  user_id String @db.Uuid
+
+  @@map("sessions")
 }
 
 model PracticumAssistant {
@@ -132,7 +149,7 @@ model PracticumAssistant {
 model ClassHistoryTracks {
   class      SubjectClass @relation(fields: [class_id], references: [id])
   student    Student      @relation(fields: [student_id], references: [user_id])
-  created_at DateTime     @db.Timestamptz()
+  created_at DateTime     @default(now()) @db.Timestamptz()
   ended_at   DateTime     @db.Timestamptz()
 
   class_id   String @db.Uuid
@@ -144,14 +161,14 @@ model ClassHistoryTracks {
 
 // Subject Section
 model Subject {
-  id            String    @id @db.Uuid
+  id            String    @id @default(uuid(7)) @db.Uuid
   name          String    @db.VarChar(110)
   slug          String    @db.VarChar(110)
   keyword       String?   @db.VarChar(255)
   thumbnail_url String?   @db.VarChar(255)
   uploader      User      @relation(fields: [uploader_id], references: [id])
-  created_at    DateTime  @db.Timestamptz()
-  updated_at    DateTime  @db.Timestamptz()
+  created_at    DateTime  @default(now()) @db.Timestamptz()
+  updated_at    DateTime  @updatedAt @db.Timestamptz()
   deleted_at    DateTime? @db.Timestamptz()
 
   uploader_id String         @db.Uuid
@@ -161,14 +178,14 @@ model Subject {
 }
 
 model SubjectClass {
-  id            String   @id @db.Uuid
+  id            String   @id @default(uuid(7)) @db.Uuid
   class_code    String   @db.Char(1)
   subject       Subject  @relation(fields: [subject_id], references: [id])
   instructor    Lecture  @relation(fields: [instructor_id], references: [user_id])
   academic_year Int      @db.SmallInt
   is_even_term  Boolean  @db.Boolean
   creator       User     @relation(fields: [creator_id], references: [id])
-  created_at    DateTime @db.Timestamptz()
+  created_at    DateTime @default(now()) @db.Timestamptz()
 
   subject_id              String               @db.Uuid
   instructor_id           String               @db.Uuid
@@ -182,7 +199,7 @@ model SubjectClass {
 }
 
 model Material {
-  id            String           @id @db.Uuid
+  id            String           @id @default(uuid(7)) @db.Uuid
   subject_class SubjectClass     @relation(fields: [subject_class_id], references: [id])
   title         String           @db.VarChar(155)
   description   String?          @db.Text
@@ -192,8 +209,8 @@ model Material {
   academic_year Int              @db.SmallInt
   visitor_count Int              @default(0)
   uploader      User             @relation(fields: [uploader_id], references: [id])
-  created_at    DateTime         @db.Timestamptz()
-  updated_at    DateTime         @db.Timestamptz()
+  created_at    DateTime         @default(now()) @db.Timestamptz()
+  updated_at    DateTime         @updatedAt @db.Timestamptz()
   deleted_at    DateTime?        @db.Timestamptz()
 
   subject_class_id String           @db.Uuid
@@ -204,14 +221,14 @@ model Material {
 }
 
 model MaterialReport {
-  id          String        @id @db.Uuid
+  id          String        @id @default(uuid(7)) @db.Uuid
   material    Material      @relation(fields: [material_id], references: [id])
   reporter    User          @relation(fields: [reporter_id], references: [id], name: "ReportedMaterialReport")
   reviewer    User          @relation(fields: [reviewer_id], references: [id], name: "ReviewedMaterialReport")
   reason      String        @db.VarChar()
   description String        @db.Text
   status      Report_Status
-  created_at  DateTime      @db.Timestamptz()
+  created_at  DateTime      @default(now()) @db.Timestamptz()
 
   material_id String @db.Uuid
   reporter_id String @db.Uuid
