@@ -1,7 +1,7 @@
 "use client"
 import React from 'react';
 import LoginCard from "@/modules/auth/components/ui/LoginCard";
-import {cn} from "@heroui/styles";
+import {cn} from "@/modules/shadcn/utils";
 
 const LoginPage = () => {
     return (
