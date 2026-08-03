@@ -24,7 +24,7 @@ interface SidebarItem {
     permitted?: Access_Type[]
 }
 
-const AppSidebar = () => {
+const MainSidebar = () => {
     const user = useUser()
 
     const pathname = usePathname()
@@ -105,4 +105,4 @@ const AppSidebar = () => {
     );
 };
 
-export default AppSidebar;
+export default MainSidebar;
