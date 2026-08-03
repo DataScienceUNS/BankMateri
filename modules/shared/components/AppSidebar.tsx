@@ -13,8 +13,9 @@ import {
     SidebarGroupContent
     , SidebarFooter
 } from "@/modules/shadcn/ui/sidebar";
-import {Access_Type} from "@/app/generated/prisma";
 import {useUser} from "@/providers/auth/auth-provider";
+import {Access_Type} from "@/app/generated/prisma";
+import Link from "next/link";
 
 interface SidebarItem {
     title: string
@@ -60,10 +61,10 @@ const AppSidebar = () => {
                                           data-[active=true]:bg-gray-100 data-[active=true]:font-medium
                                         `}
                                         >
-                                            <a href={item.url}>
+                                            <Link href={item.url}>
                                                 <item.icon className="stroke-2 h-4.5! w-4.5!"/>
                                                 <span className="text-[15px]">{item.title}</span>
-                                            </a>
+                                            </Link>
                                         </SidebarMenuButton>
                                     </SidebarMenuItem>
                                 )
@@ -88,10 +89,10 @@ const AppSidebar = () => {
                                           data-[active=true]:bg-gray-100 data-[active=true]:font-medium
                                         `}
                                         >
-                                            <a href={item.url}>
+                                            <Link href={item.url}>
                                                 <item.icon className="stroke-2 h-4.5! w-4.5!"/>
                                                 <span className="text-[15px]">{item.title}</span>
-                                            </a>
+                                            </Link>
                                         </SidebarMenuButton>
                                     </SidebarMenuItem>
                                 )
