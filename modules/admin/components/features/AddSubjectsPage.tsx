@@ -1,0 +1,45 @@
+"use client"
+
+import React, {useActionState} from 'react';
+import {Card, CardContent, CardFooter} from "@/modules/shadcn/ui/card";
+import {Label} from "@/modules/shadcn/ui/label";
+import {Input} from "@/modules/shadcn/ui/input";
+import {Textarea} from "@/modules/shadcn/ui/textarea";
+import {Button} from "@/modules/shadcn/ui/button";
+import {handlingAddSubjectForm} from "@/modules/admin/actions/handlingAddSubjectForm";
+
+const AddSubjectsPage = () => {
+    const [, formAction, isPending] = useActionState(handlingAddSubjectForm, null)
+
+    return (
+        <div className="mt-12">
+            <header>
+                <h1 className="text-2xl font-semibold">Add New Subject</h1>
+                <h3 className="text-neutral-500">Manage all course subjects across every semester</h3>
+            </header>
+            <main className="mt-6">
+                <form action={formAction}>
+                    <Card className="max-w-2xl">
+                        <CardContent className="flex flex-col gap-6 mt-2">
+                            <div className="flex flex-col gap-2">
+                                <Label htmlFor="name">Subject Name</Label>
+                                <Input id="name" name="name" aria-label="name" type="text" placeholder="Enter subject name" required/>
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <Label htmlFor="keyword">Keyword</Label>
+                                <Textarea id="keyword" name="keyword" aria-label="keyword"
+                                          placeholder="Add keywords from the subject so others can find it easily (separate with comma)"
+                                          required/>
+                            </div>
+                        </CardContent>
+                        <CardFooter>
+                            <Button type="submit" disabled={isPending} className="w-full cursor-pointer">Add Subject</Button>
+                        </CardFooter>
+                    </Card>
+                </form>
+            </main>
+        </div>
+    );
+};
+
+export default AddSubjectsPage;
