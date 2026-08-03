@@ -7,6 +7,7 @@ import {SidebarProvider} from "@/modules/shadcn/ui/sidebar";
 import {Kbd} from "@/modules/shadcn/ui/kbd";
 import {cn} from "@/modules/shadcn/utils";
 import NavbarProfile from "@/modules/shared/components/NavbarProfile";
+import NavbarSearch from "@/modules/shared/components/NavbarSearch";
 
 const layout = ({children}: Readonly<{ children: React.ReactNode }>) => {
     return (
@@ -15,16 +16,7 @@ const layout = ({children}: Readonly<{ children: React.ReactNode }>) => {
                 className={cn('fixed top-0 left-0 z-50', 'w-screen h-15 px-8', 'flex items-center justify-between', 'bg-transparent border-b border-b-neutral-200')}>
                 <Image src="/image/long_logo.svg" width={130} height={10} alt="DSRC Logo"/>
                 <div>
-                    <InputGroup
-                        className={cn('w-102 h-9 border-neutral-400', 'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2')}>
-                        <InputGroupInput placeholder="Search materials, subjects, people..."/>
-                        <InputGroupAddon>
-                            <Search/>
-                        </InputGroupAddon>
-                        <InputGroupAddon align="inline-end">
-                            <Kbd>Ctrl+K</Kbd>
-                        </InputGroupAddon>
-                    </InputGroup>
+                    <NavbarSearch/>
                 </div>
                 <NavbarProfile/>
             </div>
