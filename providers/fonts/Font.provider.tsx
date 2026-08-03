@@ -97,8 +97,8 @@ const InterFont = localFont({
     variable: "--font-inter"
 })
 
-const FontProvider = ({children}: Readonly<{children: React.ReactNode}>) => {
-    return <div className={`${InterFont.className} font-inter`}>{children}</div>;
+const FontProvider = ({children}: Readonly<{ children: React.ReactNode }>) => {
+    return <body className={`${InterFont.className} font-inter`}>{children}</body>;
 };
 
 export default FontProvider;
