@@ -1,10 +1,10 @@
 import React from 'react';
 import Image from "next/image";
-import MainSidebar from "@/app/(main)/MainSidebar";
 import {SidebarProvider} from "@/modules/shadcn/ui/sidebar";
 import {cn} from "@/modules/shadcn/utils";
 import NavbarProfile from "@/modules/shared/components/NavbarProfile";
 import NavbarSearch from "@/modules/shared/components/NavbarSearch";
+import AdminSidebar from "@/app/(admin)/AdminSidebar";
 
 const layout = ({children}: Readonly<{ children: React.ReactNode }>) => {
     return (
@@ -18,7 +18,7 @@ const layout = ({children}: Readonly<{ children: React.ReactNode }>) => {
                 <NavbarProfile/>
             </div>
             <div className="flex h-screen w-full pt-15 overflow-hidden">
-                <MainSidebar/>
+                <AdminSidebar/>
                 <main className="flex-1 overflow-y-auto flex justify-center">
                     <div className="w-full max-w-290">
                         {children}
