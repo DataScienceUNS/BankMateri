@@ -1,10 +1,7 @@
 import React from 'react';
 import Image from "next/image";
-import {Search} from "lucide-react";
 import AppSidebar from "@/modules/shared/components/AppSidebar";
-import {InputGroup, InputGroupAddon, InputGroupInput} from "@/modules/shadcn/ui/input-group";
 import {SidebarProvider} from "@/modules/shadcn/ui/sidebar";
-import {Kbd} from "@/modules/shadcn/ui/kbd";
 import {cn} from "@/modules/shadcn/utils";
 import NavbarProfile from "@/modules/shared/components/NavbarProfile";
 import NavbarSearch from "@/modules/shared/components/NavbarSearch";
@@ -20,13 +17,13 @@ const layout = ({children}: Readonly<{ children: React.ReactNode }>) => {
                 </div>
                 <NavbarProfile/>
             </div>
-            <div className="flex w-full mt-15">
+            <div className="flex h-screen w-full pt-15 overflow-hidden">
                 <AppSidebar/>
-                <div className="flex-1 flex justify-center">
-                    <div className="bg-red-500 w-290">
+                <main className="flex-1 overflow-y-auto flex justify-center">
+                    <div className="w-full max-w-290">
                         {children}
                     </div>
-                </div>
+                </main>
             </div>
         </SidebarProvider>
     );
