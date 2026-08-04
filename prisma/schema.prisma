@@ -163,7 +163,9 @@ model ClassHistoryTracks {
 model Subject {
   id            String    @id @default(uuid(7)) @db.Uuid
   name          String    @db.VarChar(110)
-  slug          String    @db.VarChar(110)
+  code          String    @unique @db.Char(6)
+  hex_color     String    @db.Char(6)
+  term          Int       @db.SmallInt
   keyword       String?   @db.VarChar(255)
   thumbnail_url String?   @db.VarChar(255)
   uploader      User      @relation(fields: [uploader_id], references: [id])
@@ -172,6 +174,7 @@ model Subject {
   deleted_at    DateTime? @db.Timestamptz()
 
   uploader_id String         @db.Uuid
+  materials   Material[]
   class       SubjectClass[]
 
   @@map("subjects")
@@ -183,24 +186,22 @@ model SubjectClass {
   subject       Subject  @relation(fields: [subject_id], references: [id])
   instructor    Lecture  @relation(fields: [instructor_id], references: [user_id])
   academic_year Int      @db.SmallInt
-  is_even_term  Boolean  @db.Boolean
   creator       User     @relation(fields: [creator_id], references: [id])
   created_at    DateTime @default(now()) @db.Timestamptz()
 
   subject_id              String               @db.Uuid
   instructor_id           String               @db.Uuid
   creator_id              String               @db.Uuid
-  materials               Material[]
   practicum_assistant     PracticumAssistant[]
   listed_on_student_track ClassHistoryTracks[]
 
-  @@unique([class_code, subject_id, academic_year, is_even_term])
+  @@unique([class_code, subject_id, academic_year])
   @@map("subject_classes")
 }
 
 model Material {
   id            String           @id @default(uuid(7)) @db.Uuid
-  subject_class SubjectClass     @relation(fields: [subject_class_id], references: [id])
+  subject_class Subject          @relation(fields: [subject_id], references: [id])
   title         String           @db.VarChar(155)
   description   String?          @db.Text
   content_url   String           @db.VarChar(500)
@@ -213,9 +214,9 @@ model Material {
   updated_at    DateTime         @updatedAt @db.Timestamptz()
   deleted_at    DateTime?        @db.Timestamptz()
 
-  subject_class_id String           @db.Uuid
-  uploader_id      String           @db.Uuid
-  report_card      MaterialReport[]
+  subject_id  String           @db.Uuid
+  uploader_id String           @db.Uuid
+  report_card MaterialReport[]
 
   @@map("materials")
 }

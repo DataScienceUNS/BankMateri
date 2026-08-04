@@ -3,17 +3,9 @@
 import React from 'react';
 import {
     ArrowLeftFromLine,
-    Bookmark, BookText,
-    FilePen,
-    History,
-    Home,
-    Library, LibraryBig,
-    LifeBuoy,
+    BookText, Compass, LibraryBig,
     LucideProps, MonitorCog,
-    Settings,
-    ShieldCog,
-    Upload, UserRound,
-    Users, UsersRound
+    UsersRound
 } from "lucide-react";
 import {usePathname} from "next/navigation";
 import {
@@ -42,6 +34,7 @@ const AdminSidebar = () => {
 
     const pathname = usePathname()
     const contentItems: SidebarItem[] = [
+        {title: "Overview", url: "/admin", icon: Compass, permitted: ["admin"]},
         {title: "Subjects", url: "/admin/subjects", icon: LibraryBig, permitted: ["admin"]},
         {title: "Materials", url: "/admin/materials", icon: BookText, permitted: ["admin"]},
         {title: "People", url: "/admin/people", icon: UsersRound, permitted: ["admin"]},
@@ -91,7 +84,6 @@ const AdminSidebar = () => {
                                     <SidebarMenuItem key={item.title}>
                                         <SidebarMenuButton
                                             asChild
-                                            isActive={pathname === item.url}
                                             className={`
                                           flex items-center gap-3 px-3 py-2 h-9 text-gray-600 rounded-lg transition-colors
                                           hover:bg-gray-100 hover:text-gray-900
