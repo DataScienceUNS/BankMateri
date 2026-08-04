@@ -5,6 +5,7 @@ import {unwrap} from "@/utils/actions/unwrap-action";
 import {prisma} from "@/utils/databases/prisma";
 import {getCurrentUser} from "@/modules/auth/lib/getCurrentUser";
 import {Subject} from "@/app/generated/prisma";
+import {redirect} from "next/navigation";
 
 export type AddSubjectState = {
     success: boolean;
@@ -23,18 +24,22 @@ export const handlingAddSubjectForm = async (_prevState: AddSubjectState, formDa
         return {success: false, message: "Name and keyword are required."}
     }
 
-    const insertedSubject = await prisma.subject.create({
-        data: {
-            name,
-            keyword,
-            uploader_id: user.user.id,
-            slug: slugify(name, {lower: true, strict: true, trim: true})
+    try {
+        await prisma.subject.create({
+            data: {
+                name,
+                keyword,
+                uploader_id: user.user.id,
+                slug: slugify(name, {lower: true, strict: true, trim: true})
+            }
+        })
+    } catch (err) {
+        void err
+        return {
+            success: false,
+            message: "Server Error"
         }
-    })
-
-    return {
-        success: true,
-        message: "Subject created successfully",
-        subject: insertedSubject
     }
+
+    redirect('/admin/subjects')
 }

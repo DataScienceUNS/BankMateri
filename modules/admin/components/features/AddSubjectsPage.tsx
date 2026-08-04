@@ -7,15 +7,22 @@ import {Input} from "@/modules/shadcn/ui/input";
 import {Textarea} from "@/modules/shadcn/ui/textarea";
 import {Button} from "@/modules/shadcn/ui/button";
 import {handlingAddSubjectForm} from "@/modules/admin/actions/handlingAddSubjectForm";
+import Link from "next/link";
+import {ChevronLeft} from "lucide-react";
 
 const AddSubjectsPage = () => {
     const [, formAction, isPending] = useActionState(handlingAddSubjectForm, null)
 
     return (
         <div className="mt-12">
-            <header>
-                <h1 className="text-2xl font-semibold">Add New Subject</h1>
-                <h3 className="text-neutral-500">Manage all course subjects across every semester</h3>
+            <header className="flex justify-between items-center">
+                <div>
+                    <h1 className="text-2xl font-semibold">Add New Subject</h1>
+                    <h3 className="text-neutral-500">Manage all course subjects across every semester</h3>
+                </div>
+                <Link href="/admin/subjects">
+                    <Button className="cursor-pointer" variant="secondary"><ChevronLeft/> Back</Button>
+                </Link>
             </header>
             <main className="mt-6">
                 <form action={formAction}>
