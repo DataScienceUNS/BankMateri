@@ -32,7 +32,7 @@ const MainSidebar = () => {
         {title: "Home", url: "/", icon: Home},
         {title: "Bookmarks", url: "/my/bookmarks", icon: Bookmark, permitted: ["guest", "verified", "supervisor", "admin"]},
         {title: "History", url: "/my/histories", icon: History, permitted: ["guest", "verified", "supervisor", "admin"]},
-        {title: "Subjects", url: "/my/subjects", icon: Library},
+        {title: "Subjects", url: "/subjects", icon: Library},
         {title: "Upload Material", url: "/upload/material", icon: Upload, permitted: ["verified", "supervisor", "admin"]},
         {title: "Community", url: "/community", icon: Users, permitted: ["verified", "supervisor", "admin"]},
     ]
