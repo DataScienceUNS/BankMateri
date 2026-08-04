@@ -1,12 +1,12 @@
 import React from 'react';
 import {Card, CardContent, CardFooter} from "@/modules/shadcn/ui/card";
-import {BookOpen, FolderOpen} from "lucide-react";
 import {Badge} from "@/modules/shadcn/ui/badge";
 import {Button} from "@/modules/shadcn/ui/button";
+import {BookOpen, FolderOpen} from "lucide-react";
 import Link from "next/link";
 
-const SubjectCard = ({key, name, code, hex_color, term, material_count, link}: {
-    key?: number,
+const SubjectCard = ({index, name, code, hex_color, term, material_count, link}: {
+    index?: number,
     name: string,
     code: string,
     hex_color: string,
@@ -15,7 +15,7 @@ const SubjectCard = ({key, name, code, hex_color, term, material_count, link}: {
     link: string
 }) => {
     return (
-        <Card key={key}>
+        <Card key={index}>
             <CardContent>
                 <div className="flex justify-between items-center">
                     <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{backgroundColor: hex_color}}>

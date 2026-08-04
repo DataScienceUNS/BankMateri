@@ -2,7 +2,7 @@ import React from 'react';
 import {dummyData} from "@/modules/subject/components/features/DummyData";
 import SubjectCard from "@/modules/shared/components/ui/SubjectCard";
 
-const SubjectPage = () => {
+const SubjectPage = async () => {
     return (
         <div className="mt-12">
             <header className="flex justify-between items-center">
@@ -10,9 +10,6 @@ const SubjectPage = () => {
                     <h1 className="text-2xl font-semibold">Subjects</h1>
                     <h3 className="text-neutral-500">Every course in the resource center</h3>
                 </div>
-                {/*<Link href="/admin/subjects/add">*/}
-                {/*    <Button className="cursor-pointer"><Plus/> Add New</Button>*/}
-                {/*</Link>*/}
             </header>
             <main className="mt-6 grid grid-cols-3 gap-4">
                 {dummyData.map((subject, index) => (
