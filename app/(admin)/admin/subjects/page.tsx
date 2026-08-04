@@ -1,9 +1,9 @@
 import React from 'react';
-import SubjectsPage from "@/modules/admin/components/features/SubjectsPage";
+import AdminSubjectPage from "@/modules/admin/components/features/AdminSubjectPage";
 
 const page = () => {
     return (
-        <SubjectsPage/>
+        <AdminSubjectPage/>
     );
 };
 

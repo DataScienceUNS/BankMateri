@@ -3,7 +3,7 @@ import {Button} from "@/modules/shadcn/ui/button";
 import {Plus} from "lucide-react";
 import Link from "next/link";
 
-const SubjectsPage = () => {
+const AdminSubjectPage = () => {
     return (
         <div className="mt-12">
             <header className="flex justify-between items-center">
@@ -19,4 +19,4 @@ const SubjectsPage = () => {
     );
 };
 
-export default SubjectsPage;
+export default AdminSubjectPage;
