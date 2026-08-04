@@ -32,7 +32,7 @@ const SubjectCard = ({index, name, code, hex_color, term, material_count, link}:
                 <span className="text-neutral-500 text-sm">
                     {material_count} Material
                 </span>
-                <Link href={link} target="_blank">
+                <Link href={`/subject/${link}`} target="_blank">
                     <Button><FolderOpen/> Open</Button>
                 </Link>
             </CardFooter>

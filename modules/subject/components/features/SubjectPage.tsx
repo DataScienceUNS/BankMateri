@@ -1,8 +1,11 @@
 import React from 'react';
-import {dummyData} from "@/modules/subject/components/features/DummyData";
 import SubjectCard from "@/modules/shared/components/ui/SubjectCard";
+import {getAllSubject} from "@/modules/subject/actions/getAllSubject";
+import {unwrap} from "@/utils/actions/unwrap-action";
 
 const SubjectPage = async () => {
+    const response = unwrap(await getAllSubject())
+
     return (
         <div className="mt-12">
             <header className="flex justify-between items-center">
@@ -12,9 +15,9 @@ const SubjectPage = async () => {
                 </div>
             </header>
             <main className="mt-6 grid grid-cols-3 gap-4">
-                {dummyData.map((subject, index) => (
-                    <SubjectCard name={subject.name} code={subject.code} link={subject.link} hex_color={subject.hex_color}
-                                 term={subject.term} material_count={subject.material_count} key={index}/>
+                {response.map((subject, index) => (
+                    <SubjectCard name={subject.name} code={subject.code} link={subject.code} hex_color={`#${subject.hex_color}`}
+                                 term={subject.term} material_count={subject._count.materials} key={index}/>
                 ))}
             </main>
         </div>
