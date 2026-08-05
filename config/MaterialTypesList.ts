@@ -1,21 +1,21 @@
 export const MaterialTypesList = [
     {
-        name: "Excersice",
+        label: "Excersice",
         value: "excersice"
     }, {
-        name: "Material",
+        label: "Material",
         value: "material"
     }, {
-        name: "Midterm Exam",
+        label: "Midterm Exam",
         value: "midterm_exam"
     }, {
-        name: "Final Exam",
+        label: "Final Exam",
         value: "final_exam"
     }, {
-        name: "Responsi",
+        label: "Responsi",
         value: "responsi"
     }, {
-        name: "Lecture Note",
+        label: "Lecture Note",
         value: "lecture_note"
     },
-]
+] as SelectionPayload[]

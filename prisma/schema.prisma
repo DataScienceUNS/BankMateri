@@ -192,20 +192,21 @@ model SubjectClass {
 }
 
 model Material {
-  id            String           @id @default(uuid(7)) @db.Uuid
-  subject       Subject          @relation(fields: [subject_id], references: [id])
-  title         String           @db.VarChar(155)
-  description   String?          @db.Text
-  content_url   String           @db.VarChar(500)
-  type          String           @db.VarChar(110)
-  source        Material_Sources
-  academic_year String           @db.Char(9)
-  visitor_count Int              @default(0)
-  is_copied     Boolean          @default(false)
-  uploader      User             @relation(fields: [uploader_id], references: [id])
-  created_at    DateTime         @default(now()) @db.Timestamptz()
-  updated_at    DateTime         @updatedAt @db.Timestamptz()
-  deleted_at    DateTime?        @db.Timestamptz()
+  id             String           @id @default(uuid(7)) @db.Uuid
+  subject        Subject          @relation(fields: [subject_id], references: [id])
+  title          String           @db.VarChar(155)
+  description    String?          @db.Text
+  content_url    String           @db.VarChar(500)
+  type           String           @db.VarChar(110)
+  source         Material_Sources
+  academic_year  String           @db.Char(9)
+  visitor_count  Int              @default(0)
+  meeting_number Int?             @db.SmallInt
+  is_copied      Boolean          @default(false)
+  uploader       User             @relation(fields: [uploader_id], references: [id])
+  created_at     DateTime         @default(now()) @db.Timestamptz()
+  updated_at     DateTime         @updatedAt @db.Timestamptz()
+  deleted_at     DateTime?        @db.Timestamptz()
 
   subject_id  String           @db.Uuid
   uploader_id String           @db.Uuid

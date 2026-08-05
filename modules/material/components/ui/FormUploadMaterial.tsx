@@ -1,5 +1,6 @@
 "use client"
 import React from 'react';
+import {SupportedCloudStorageType} from "@/config/SupportedCloudStorage";
 import {Upload} from "lucide-react";
 import {Button} from "@/modules/shadcn/ui/button";
 import {Input} from "@/modules/shadcn/ui/input";
@@ -12,7 +13,7 @@ import {Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem, C
 
 const FormUploadMaterial = ({subjectAvailable, supportedCloudStorage, availableAcademicYears, materialTypes}: {
     subjectAvailable: SelectionPayload[],
-    supportedCloudStorage: SelectionPayload[],
+    supportedCloudStorage: SupportedCloudStorageType[],
     availableAcademicYears: string[],
     materialTypes: SelectionPayload[],
 }) => {

@@ -1,3 +1,5 @@
+"use server"
+
 import {createAction} from "@/utils/actions/create-action";
 import {SupportedCloudStorage} from "@/config/SupportedCloudStorage";
 import {AvailableAcademicYears} from "@/config/AvailableAcademicYears";
@@ -11,8 +13,11 @@ export const GetFormSelectionData = createAction(
                 name: true,
                 code: true,
             }
-        })
-        
+        }).then(res => res.map(subject => ({
+            label: subject.name,
+            value: subject.code
+        })))
+
         return {
             SubjectAvailable,
             SupportedCloudStorage,

@@ -1,11 +1,12 @@
 import React from 'react';
 import UploadMaterialPage from "@/modules/material/components/features/UploadMaterialPage";
+import LoadingPage from "@/modules/shared/components/featured/LoadingPage";
 
 const page = () => {
     return (
-        <div>
+        <React.Suspense fallback={<LoadingPage/>}>
             <UploadMaterialPage/>
-        </div>
+        </React.Suspense>
     );
 };
 

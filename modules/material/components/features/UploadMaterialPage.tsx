@@ -1,23 +1,16 @@
 import React from 'react';
 import FormUploadMaterial from "@/modules/material/components/ui/FormUploadMaterial";
+import {GetFormSelectionData} from "@/modules/material/actions/GetFormSelectionData";
 
 
 const UploadMaterialPage = async () => {
-    const subjects = [
-        {value: "MATH101", label: "Matematika Dasar"},
-        {value: "PHYS101", label: "Fisika Dasar"},
-        {value: "CHEM101", label: "Kimia Dasar"},
-        {value: "BIOL101", label: "Biologi Dasar"},
-        {value: "INDO101", label: "Bahasa Indonesia"},
-        {value: "ENGL101", label: "Bahasa Inggris"},
-        {value: "HIST101", label: "Sejarah Indonesia"},
-        {value: "PPKN101", label: "Pendidikan Pancasila dan Kewarganegaraan"},
-        {value: "COMP101", label: "Pemrograman Dasar"},
-        {value: "ECON101", label: "Ekonomi"},
-        {value: "ARTS101", label: "Seni Budaya"},
-        {value: "PJOK101", label: "Pendidikan Jasmani, Olahraga, dan Kesehatan"},
-    ];
-    
+    const payloadSelector = await GetFormSelectionData()
+    if (!payloadSelector.success) return (
+        <div>
+            {JSON.stringify(payloadSelector.error)}
+        </div>
+    )
+
     return (
         <div className="mt-12">
             <header className="flex justify-between items-center">
@@ -27,7 +20,10 @@ const UploadMaterialPage = async () => {
                 </div>
             </header>
             <main className="mt-6">
-                <FormUploadMaterial/>
+                <FormUploadMaterial materialTypes={payloadSelector.data.MaterialTypesList}
+                                    availableAcademicYears={payloadSelector.data.AvailableAcademicYears}
+                                    subjectAvailable={payloadSelector.data.SubjectAvailable}
+                                    supportedCloudStorage={payloadSelector.data.SupportedCloudStorage}/>
             </main>
         </div>
     );
