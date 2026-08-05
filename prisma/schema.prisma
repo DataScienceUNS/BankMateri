@@ -201,7 +201,7 @@ model SubjectClass {
 
 model Material {
   id            String           @id @default(uuid(7)) @db.Uuid
-  subject_class Subject          @relation(fields: [subject_id], references: [id])
+  subject       Subject          @relation(fields: [subject_id], references: [id])
   title         String           @db.VarChar(155)
   description   String?          @db.Text
   content_url   String           @db.VarChar(500)

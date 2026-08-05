@@ -1,9 +1,10 @@
 import React from 'react';
+import UploadMaterialPage from "@/modules/material/components/features/UploadMaterialPage";
 
 const page = () => {
     return (
         <div>
-            Upload Material
+            <UploadMaterialPage/>
         </div>
     );
 };
