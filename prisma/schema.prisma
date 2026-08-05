@@ -21,14 +21,6 @@ enum Material_Sources {
   practicum
 }
 
-enum Material_Types {
-  excersice
-  material
-  midterm_exam
-  final_exam
-  responsi
-}
-
 enum Report_Status {
   pending
   approved
@@ -185,7 +177,7 @@ model SubjectClass {
   class_code    String   @db.Char(1)
   subject       Subject  @relation(fields: [subject_id], references: [id])
   instructor    Lecture  @relation(fields: [instructor_id], references: [user_id])
-  academic_year Int      @db.SmallInt
+  academic_year String   @db.Char(9)
   creator       User     @relation(fields: [creator_id], references: [id])
   created_at    DateTime @default(now()) @db.Timestamptz()
 
@@ -205,10 +197,11 @@ model Material {
   title         String           @db.VarChar(155)
   description   String?          @db.Text
   content_url   String           @db.VarChar(500)
-  type          Material_Types
+  type          String           @db.VarChar(110)
   source        Material_Sources
-  academic_year Int              @db.SmallInt
+  academic_year String           @db.Char(9)
   visitor_count Int              @default(0)
+  is_copied     Boolean          @default(false)
   uploader      User             @relation(fields: [uploader_id], references: [id])
   created_at    DateTime         @default(now()) @db.Timestamptz()
   updated_at    DateTime         @updatedAt @db.Timestamptz()
