@@ -1,14 +1,13 @@
 import React from 'react';
 import FormUploadMaterial from "@/modules/material/components/ui/FormUploadMaterial";
 import {GetFormSelectionData} from "@/modules/material/actions/GetFormSelectionData";
+import ErrorPage from "@/modules/shared/components/featured/ErrorPage";
 
 
 const UploadMaterialPage = async () => {
     const payloadSelector = await GetFormSelectionData()
     if (!payloadSelector.success) return (
-        <div>
-            {JSON.stringify(payloadSelector.error)}
-        </div>
+        <ErrorPage/>
     )
 
     return (
