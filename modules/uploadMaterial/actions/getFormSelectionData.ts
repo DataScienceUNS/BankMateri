@@ -3,8 +3,8 @@
 import {createAction} from "@/utils/actions/create-action";
 import {SupportedCloudStorage} from "@/config/SupportedCloudStorage";
 import {AvailableAcademicYears} from "@/config/AvailableAcademicYears";
-import {MaterialTypesList} from "@/config/MaterialTypesList"
 import {prisma} from "@/utils/databases/prisma";
+import {MaterialCategoryLists} from "@/config/MaterialCategoryLists";
 
 export const getFormSelectionData = createAction(
     async () => {
@@ -22,7 +22,7 @@ export const getFormSelectionData = createAction(
             SubjectAvailable,
             SupportedCloudStorage,
             AvailableAcademicYears,
-            MaterialTypesList
+            MaterialCategoryLists
         }
     }
 );

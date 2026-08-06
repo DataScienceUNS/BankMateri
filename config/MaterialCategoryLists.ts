@@ -1,4 +1,4 @@
-export const MaterialTypesList = [
+export const MaterialCategoryLists = [
     {
         label: "Excersice",
         value: "excersice"

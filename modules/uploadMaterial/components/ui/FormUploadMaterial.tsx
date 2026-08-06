@@ -1,15 +1,16 @@
 "use client"
-import React, {useActionState} from 'react';
+import React from 'react';
 import {SupportedCloudStorageType} from "@/config/SupportedCloudStorage";
 import {Upload} from "lucide-react";
+import {Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem, ComboboxList} from "@/modules/shadcn/ui/combobox";
+import {Select, SelectTrigger, SelectValue, SelectContent, SelectItem, SelectGroup} from "@/modules/shadcn/ui/select";
+import {Field, FieldDescription, FieldLabel} from "@/modules/shadcn/ui/field";
+import {Card, CardContent, CardFooter} from "@/modules/shadcn/ui/card";
+import {handlingSubmitForm} from "@/modules/uploadMaterial/actions/handlingSubmitForm";
 import {Button} from "@/modules/shadcn/ui/button";
 import {Input} from "@/modules/shadcn/ui/input";
 import {Label} from "@/modules/shadcn/ui/label";
-import {Select, SelectTrigger, SelectValue, SelectContent, SelectItem, SelectGroup} from "@/modules/shadcn/ui/select";
 import {Textarea} from "@/modules/shadcn/ui/textarea";
-import {Card, CardContent, CardFooter} from "@/modules/shadcn/ui/card";
-import {Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem, ComboboxList} from "@/modules/shadcn/ui/combobox";
-import {handlingSubmitForm} from "@/modules/uploadMaterial/actions/handlingSubmitForm";
 
 
 const FormUploadMaterial = ({subjectAvailable, supportedCloudStorage, availableAcademicYears, materialTypes}: {
@@ -18,25 +19,26 @@ const FormUploadMaterial = ({subjectAvailable, supportedCloudStorage, availableA
     availableAcademicYears: string[],
     materialTypes: SelectionPayload[],
 }) => {
-    const [, formAction, isPending] = useActionState(handlingSubmitForm, null)
-
+    const [state, formAction, isPending] = React.useActionState(handlingSubmitForm, null)
     const [selectedSubject, setSelectedSubject] = React.useState<SelectionPayload | null>(null)
 
     return (
         <form action={formAction}>
-            <input name="subject" hidden={true} value={selectedSubject?.value || ""}/>
+            <input readOnly name="subject" hidden={true} value={selectedSubject?.value || ""}/>
             <Card className="w-full max-w-3xl border-gray-200 shadow-sm py-0">
                 <CardContent className="space-y-5 pt-6 pb-3">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <div className="space-y-2">
-                            <Label htmlFor="subject-trigger" className="text-gray-700 font-medium">Subject *</Label>
+                        <Field data-invalid={!!state?.errors?.subject}>
+                            <FieldLabel htmlFor="subject-trigger" className="font-medium">Subject *</FieldLabel>
                             <Combobox
-                                items={subjectAvailable}
                                 name="subject-trigger"
+                                items={subjectAvailable}
+                                key={state?.values?.subject ?? "empty"}
+                                defaultValue={subjectAvailable.find(item => item.value === state?.values.subject)}
                                 itemToStringValue={(item: SelectionPayload) => item.label}
                                 onValueChange={(value: SelectionPayload | null) => setSelectedSubject(value)}
                             >
-                                <ComboboxInput placeholder="Select a subject"/>
+                                <ComboboxInput aria-invalid={!!state?.errors?.subject} placeholder="Select a subject"/>
                                 <ComboboxContent>
                                     <ComboboxEmpty>No items found.</ComboboxEmpty>
                                     <ComboboxList>
@@ -47,12 +49,16 @@ const FormUploadMaterial = ({subjectAvailable, supportedCloudStorage, availableA
                                         )}
                                     </ComboboxList>
                                 </ComboboxContent>
+                                <FieldDescription className="text-red-600" hidden={!state?.errors?.subject}>
+                                    {state?.errors?.subject}
+                                </FieldDescription>
                             </Combobox>
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="category" className="text-gray-700 font-medium">Category *</Label>
-                            <Select name="category">
-                                <SelectTrigger id="category" className="text-neutral-950 w-full">
+                        </Field>
+                        <Field data-invalid={!!state?.errors?.category}>
+                            <FieldLabel htmlFor="category" className="font-medium">Category *</FieldLabel>
+                            <Select name="category" defaultValue={state?.values.category}>
+                                <SelectTrigger id="category" className="text-neutral-950 w-full"
+                                               aria-invalid={!!state?.errors?.category}>
                                     <SelectValue placeholder="Select category"/>
                                 </SelectTrigger>
                                 <SelectContent>
@@ -63,21 +69,29 @@ const FormUploadMaterial = ({subjectAvailable, supportedCloudStorage, availableA
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
-                        </div>
+                            <FieldDescription className="text-red-600" hidden={!state?.errors?.category}>
+                                {state?.errors?.category}
+                            </FieldDescription>
+                        </Field>
                     </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="title" className="text-gray-700 font-medium">Title *</Label>
+                    <Field data-invalid={!!state?.errors?.title}>
+                        <FieldLabel htmlFor="title" className="font-medium">Title *</FieldLabel>
                         <Input
+                            aria-invalid={!!state?.errors?.title}
+                            defaultValue={state?.values.title}
                             name="title"
                             id="title"
                             aria-label="title"
                             placeholder="e.g. Week 3 Lecture Notes"
                             className="placeholder:text-gray-400"
                         />
-                    </div>
+                        <FieldDescription className="text-red-600" hidden={!state?.errors?.title}>
+                            {state?.errors?.title}
+                        </FieldDescription>
+                    </Field>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="description" className="text-gray-700 font-medium">Description</Label>
+                    <Field>
+                        <FieldLabel htmlFor="description" className="font-medium">Description</FieldLabel>
                         <Textarea
                             name="description"
                             id="description"
@@ -85,13 +99,17 @@ const FormUploadMaterial = ({subjectAvailable, supportedCloudStorage, availableA
                             placeholder="What does this material cover?"
                             className="min-h-30 placeholder:text-gray-400 resize-y"
                         />
-                    </div>
+                        <FieldDescription className="text-red-600" hidden={true}>
+                            This field contains validation errors.
+                        </FieldDescription>
+                    </Field>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <div className="space-y-2">
-                            <Label htmlFor="academic-year" className="text-gray-700 font-medium">Academic Year</Label>
+                        <Field data-invalid={!!state?.errors?.academicYear}>
+                            <FieldLabel htmlFor="academic-year" className="font-medium">Academic Year</FieldLabel>
                             <Select defaultValue="2024/2025" name="academic-year">
-                                <SelectTrigger id="academic-year" className="text-neutral-950 w-full">
+                                <SelectTrigger id="academic-year" aria-invalid={!!state?.errors?.academicYear}
+                                               className="text-neutral-950 w-full">
                                     <SelectValue placeholder="Select year"/>
                                 </SelectTrigger>
                                 <SelectContent>
@@ -102,24 +120,33 @@ const FormUploadMaterial = ({subjectAvailable, supportedCloudStorage, availableA
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="meeting-no" className="text-gray-700 font-medium">Meeting No.</Label>
+                            <FieldDescription className="text-red-600" hidden={!state?.errors?.academicYear}>
+                                {state?.errors?.academicYear}
+                            </FieldDescription>
+                        </Field>
+                        <Field data-invalid={!!state?.errors?.meetingNo}>
+                            <Label htmlFor="meeting-no" className=" font-medium">Meeting No.</Label>
                             <Input
+                                aria-invalid={!!state?.errors?.meetingNo}
+                                defaultValue={state?.values.meetingNo || 1}
                                 name="meeting-no"
                                 aria-label="meeting-no"
                                 id="meeting-no"
-                                defaultValue="1"
-                                type="text"
+                                type="number"
                             />
-                        </div>
+                            <FieldDescription className="text-red-600" hidden={!state?.errors?.meetingNo}>
+                                {state?.errors?.meetingNo}
+                            </FieldDescription>
+                        </Field>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <div className="space-y-2">
-                            <Label htmlFor="material-type" className="text-gray-700 font-medium">Material Type</Label>
+                        <Field data-invalid={!!state?.errors?.materialType}>
+                            <FieldLabel htmlFor="material-type" className="font-medium">Material Type</FieldLabel>
                             <Select name="material-type">
-                                <SelectTrigger id="material-type" className="text-neutral-950 w-full">
+                                <SelectTrigger id="material-type" aria-invalid={!!state?.errors?.materialType}
+                                               defaultValue={state?.values.materialType}
+                                               className="text-neutral-950 w-full">
                                     <SelectValue placeholder="Select material type"/>
                                 </SelectTrigger>
                                 <SelectContent>
@@ -129,34 +156,45 @@ const FormUploadMaterial = ({subjectAvailable, supportedCloudStorage, availableA
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="source" className="text-gray-700 font-medium">Source</Label>
+                            <FieldDescription className="text-red-600" hidden={!state?.errors?.materialType}>
+                                {state?.errors?.materialType}
+                            </FieldDescription>
+                        </Field>
+                        <Field data-invalid={!!state?.errors?.source}>
+                            <Label htmlFor="source" className=" font-medium">Source</Label>
                             <Select name="source">
-                                <SelectTrigger id="source" className="text-neutral-950 w-full">
+                                <SelectTrigger id="source" className="text-neutral-950 w-full" aria-invalid={!!state?.errors?.source}>
                                     <SelectValue placeholder="Select source"/>
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectGroup>
+                                    <SelectGroup defaultValue={state?.values?.source}>
                                         {supportedCloudStorage?.map((storage) => (
                                             <SelectItem key={storage.value} value={storage.value}>{storage.label}</SelectItem>
                                         ))}
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
-                        </div>
+                            <FieldDescription className="text-red-600" hidden={!state?.errors?.source}>
+                                {state?.errors?.source}
+                            </FieldDescription>
+                        </Field>
                     </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="external-url" className="text-gray-700 font-medium">External URL *</Label>
+                    <Field data-invalid={!!state?.errors?.externalUrl}>
+                        <FieldLabel htmlFor="external-url" className="font-medium">External URL *</FieldLabel>
                         <Input
+                            aria-invalid={!!state?.errors?.externalUrl}
+                            defaultValue={state?.values.externalUrl}
                             id="external-url"
                             name="external-url"
                             aria-label="external-url"
                             placeholder="https://drive.google.com/..."
                             className="placeholder:text-gray-400"
                         />
-                    </div>
+                        <FieldDescription className="text-red-600" hidden={!state?.errors?.externalUrl}>
+                            {state?.errors?.externalUrl}
+                        </FieldDescription>
+                    </Field>
                 </CardContent>
                 <CardFooter className="flex justify-end py-3">
                     <Button disabled={isPending} className="cursor-pointer text-white font-medium px-5 rounded-md">
