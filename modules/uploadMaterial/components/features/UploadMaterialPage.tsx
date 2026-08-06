@@ -19,7 +19,7 @@ const UploadMaterialPage = async () => {
                 </div>
             </header>
             <main className="mt-6">
-                <FormUploadMaterial materialTypes={payloadSelector.data.MaterialTypesList}
+                <FormUploadMaterial categoryLists={payloadSelector.data.MaterialCategoryLists}
                                     availableAcademicYears={payloadSelector.data.AvailableAcademicYears}
                                     subjectAvailable={payloadSelector.data.SubjectAvailable}
                                     supportedCloudStorage={payloadSelector.data.SupportedCloudStorage}/>

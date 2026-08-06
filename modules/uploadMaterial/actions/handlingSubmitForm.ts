@@ -33,5 +33,7 @@ export const handlingSubmitForm = async (_prevState: FormState, formData: FormDa
             values: rawValues
         }
     }
+
+    console.log(validated.data)
     return null
 };

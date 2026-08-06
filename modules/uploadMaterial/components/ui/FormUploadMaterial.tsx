@@ -13,11 +13,11 @@ import {Label} from "@/modules/shadcn/ui/label";
 import {Textarea} from "@/modules/shadcn/ui/textarea";
 
 
-const FormUploadMaterial = ({subjectAvailable, supportedCloudStorage, availableAcademicYears, materialTypes}: {
+const FormUploadMaterial = ({subjectAvailable, supportedCloudStorage, availableAcademicYears, categoryLists}: {
     subjectAvailable: SelectionPayload[],
     supportedCloudStorage: SupportedCloudStorageType[],
-    availableAcademicYears: string[],
-    materialTypes: SelectionPayload[],
+    availableAcademicYears: Readonly<string[]>,
+    categoryLists: SelectionPayload[],
 }) => {
     const [state, formAction, isPending] = React.useActionState(handlingSubmitForm, null)
     const [selectedSubject, setSelectedSubject] = React.useState<SelectionPayload | null>(null)
@@ -63,7 +63,7 @@ const FormUploadMaterial = ({subjectAvailable, supportedCloudStorage, availableA
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
-                                        {materialTypes?.map((type) => (
+                                        {categoryLists?.map((type) => (
                                             <SelectItem key={type.value} value={type.value}>{type.label}</SelectItem>
                                         ))}
                                     </SelectGroup>

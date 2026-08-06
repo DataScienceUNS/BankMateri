@@ -1,8 +1,8 @@
 import {z} from 'zod';
 import {MaterialCategoryLists} from "@/config/MaterialCategoryLists";
 import {AvailableAcademicYears} from "@/config/AvailableAcademicYears";
-import {Material_Types} from "@/app/generated/prisma";
 import {SupportedCloudStorage} from "@/config/SupportedCloudStorage";
+import {Material_Type} from "@/app/generated/prisma";
 
 const materialCategoryListEnum = MaterialCategoryLists.map(type => type.value)
 const materialSourceEnum = SupportedCloudStorage.map(source => source.value)
@@ -25,7 +25,7 @@ export const uploadMaterialSchema = z.object({
     }).max(16, {
         error: 'Maximum meeting number is 16',
     }),
-    materialType: z.enum(Material_Types, {
+    materialType: z.enum(Material_Type, {
         error: 'Invalid material type',
     }),
     source: z.enum(materialSourceEnum, {
