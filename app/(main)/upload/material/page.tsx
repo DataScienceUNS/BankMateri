@@ -1,5 +1,5 @@
 import React from 'react';
-import UploadMaterialPage from "@/modules/material/components/features/UploadMaterialPage";
+import UploadMaterialPage from "@/modules/uploadMaterial/components/features/UploadMaterialPage";
 import LoadingPage from "@/modules/shared/components/featured/LoadingPage";
 
 const page = () => {

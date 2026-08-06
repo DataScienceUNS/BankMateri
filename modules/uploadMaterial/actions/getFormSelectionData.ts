@@ -6,7 +6,7 @@ import {AvailableAcademicYears} from "@/config/AvailableAcademicYears";
 import {MaterialTypesList} from "@/config/MaterialTypesList"
 import {prisma} from "@/utils/databases/prisma";
 
-export const GetFormSelectionData = createAction(
+export const getFormSelectionData = createAction(
     async () => {
         const SubjectAvailable = await prisma.subject.findMany({
             select: {
