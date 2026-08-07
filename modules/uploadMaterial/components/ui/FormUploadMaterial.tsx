@@ -1,7 +1,5 @@
 "use client";
 import React, { useEffect } from "react";
-import { SupportedCloudStorageType } from "@/config/SupportedCloudStorage";
-import { Upload } from "lucide-react";
 import {
   Combobox,
   ComboboxContent,
@@ -10,14 +8,18 @@ import {
   ComboboxItem,
   ComboboxList,
 } from "@/modules/shadcn/ui/combobox";
+import { SupportedCloudStorageType } from "@/config/SupportedCloudStorage";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem, SelectGroup } from "@/modules/shadcn/ui/select";
 import { Field, FieldDescription, FieldLabel } from "@/modules/shadcn/ui/field";
 import { Card, CardContent, CardFooter } from "@/modules/shadcn/ui/card";
 import { handlingSubmitForm } from "@/modules/uploadMaterial/actions/handlingSubmitForm";
+import { Textarea } from "@/modules/shadcn/ui/textarea";
+import { redirect } from "next/navigation";
+import { Upload } from "lucide-react";
 import { Button } from "@/modules/shadcn/ui/button";
 import { Input } from "@/modules/shadcn/ui/input";
 import { Label } from "@/modules/shadcn/ui/label";
-import { Textarea } from "@/modules/shadcn/ui/textarea";
+import { toast } from "sonner";
 
 const FormUploadMaterial = ({
   subjectAvailable,
@@ -32,13 +34,25 @@ const FormUploadMaterial = ({
 }) => {
   const [state, formAction, isPending] = React.useActionState(handlingSubmitForm, null);
   const [selectedSubject, setSelectedSubject] = React.useState<SelectionPayload | null>(null);
+  const formRef = React.useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    if (state?.success) alert(state.message || "Material created successfully");
-  }, [state?.success]);
+    if (state?.success) {
+      toast.success(state.message || "Material created successfully", {
+        position: "bottom-right",
+        duration: 5000,
+        style: {
+          color: "oklch(62.7% 0.194 149.214)",
+        },
+      });
+
+      formRef.current?.reset();
+      redirect("/");
+    }
+  }, [state]);
 
   return (
-    <form action={formAction}>
+    <form ref={formRef} action={formAction}>
       <input readOnly name="subject" hidden={true} value={selectedSubject?.value || ""} />
       <Card className="w-full max-w-3xl border-gray-200 shadow-sm py-0">
         <CardContent className="space-y-5 pt-6 pb-3">
