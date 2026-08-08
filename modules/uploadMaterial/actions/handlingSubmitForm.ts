@@ -52,10 +52,12 @@ export const handlingSubmitForm = async (_prevState: FormState, formData: FormDa
   const insertedMaterial = await createNewMaterial(validated.data, userData.data?.user.id as string);
 
   return {
-    success: true,
-    errors: {},
+    success: insertedMaterial.success,
+    errors: {
+      subject: insertedMaterial.success ? [] : ["Failed to create material"],
+    },
     values: validated.data,
-    message: "Material created successfully",
+    message: insertedMaterial.success ? "Material created successfully" : undefined,
     data: insertedMaterial.data as Material,
   };
 };
