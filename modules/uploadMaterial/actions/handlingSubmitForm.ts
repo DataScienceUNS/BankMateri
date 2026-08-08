@@ -8,13 +8,13 @@ import { Material } from "@/app/generated/prisma";
 
 type UploadMaterialValues = z.infer<typeof uploadMaterialSchema>;
 type FormErrors = Partial<Record<keyof UploadMaterialValues, string[]>> & {
-  general?: string[];
+  general?: boolean;
 };
 type FormState = {
   success: boolean;
   errors: FormErrors;
   values: Partial<UploadMaterialValues>;
-  message?: string;
+  message?: string[];
   data?: Material;
 } | null;
 
@@ -36,7 +36,7 @@ export const handlingSubmitForm = async (_prevState: FormState, formData: FormDa
   if (!validated.success) {
     return {
       success: false,
-      message: "Validation failed",
+      message: ["Validation failed", "Please check the form for errors and try again."],
       errors: z.flattenError(validated.error).fieldErrors as Record<string, string[]>,
       values: rawValues,
     };
@@ -46,8 +46,9 @@ export const handlingSubmitForm = async (_prevState: FormState, formData: FormDa
   if (!userData.success)
     return {
       success: false,
+      message: ["User not authenticated", "Please log in to create a material."],
       errors: {
-        general: ["User not authenticated"],
+        general: true,
       },
       values: rawValues,
     };
@@ -57,10 +58,10 @@ export const handlingSubmitForm = async (_prevState: FormState, formData: FormDa
   return {
     success: insertedMaterial.success,
     errors: {
-      general: insertedMaterial.success ? [] : ["Failed to insert material"],
+      general: insertedMaterial.success ? undefined : true,
     },
     values: validated.data,
-    message: insertedMaterial.success ? "Material created successfully" : undefined,
+    message: insertedMaterial.message,
     data: insertedMaterial.data as Material,
   };
 };

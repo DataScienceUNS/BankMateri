@@ -32,16 +32,17 @@ export const createNewMaterial = async (formData: z.infer<typeof uploadMaterialS
     return {
       success: true,
       status: 200,
-      message: "Material created successfully",
+      message: [
+        "Material created successfully",
+        "Thank you for your contribution. You've saved your friends a lot of time.",
+      ],
       data: insertedMaterial,
     };
   } catch (error) {
-    console.error("Error creating new material:", error);
-    console.log("Form Data:", formData);
     return {
       success: false,
       status: 500,
-      message: "An error occurred while creating the material",
+      message: ["Failed to create material", "An error occurred while creating the material, please try again later."],
       error: error instanceof Error ? error.message : "Unknown error",
     };
   }
