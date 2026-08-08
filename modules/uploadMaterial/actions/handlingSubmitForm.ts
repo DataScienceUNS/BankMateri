@@ -5,20 +5,12 @@ import { uploadMaterialSchema } from "@/modules/uploadMaterial/schemas/uploadMat
 import { z } from "zod";
 import { createNewMaterial } from "../repositories/createNewMaterial";
 import { Material } from "@/app/generated/prisma";
+import { ActionFormState } from "@/modules/shared/types/FormState";
 
 type UploadMaterialValues = z.infer<typeof uploadMaterialSchema>;
-type FormErrors = Partial<Record<keyof UploadMaterialValues, string[]>> & {
-  general?: boolean;
-};
-type FormState = {
-  success: boolean;
-  errors: FormErrors;
-  values: Partial<UploadMaterialValues>;
-  message?: string[];
-  data?: Material;
-} | null;
+type ActionState = ActionFormState<UploadMaterialValues, Material>;
 
-export const handlingSubmitForm = async (_prevState: FormState, formData: FormData): Promise<FormState> => {
+export const handlingSubmitForm = async (_prevState: ActionState, formData: FormData): Promise<ActionState> => {
   const rawValues = {
     subject: formData.get("subject") as string,
     category: formData.get("category") as string,
