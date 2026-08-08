@@ -196,6 +196,7 @@ model Material {
   subject        Subject       @relation(fields: [subject_id], references: [id])
   title          String        @db.VarChar(155)
   description    String?       @db.Text
+  source         String        @db.VarChar(125)
   content_url    String        @db.VarChar(500)
   category       String        @db.VarChar(110)
   material_type  Material_Type

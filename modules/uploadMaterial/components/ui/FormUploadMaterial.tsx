@@ -20,6 +20,9 @@ import { Button } from "@/modules/shadcn/ui/button";
 import { Input } from "@/modules/shadcn/ui/input";
 import { Label } from "@/modules/shadcn/ui/label";
 import { toast } from "sonner";
+import { InterFont } from "@/providers/fonts/Font.provider";
+import { errorToast } from "@/modules/shared/components/ui/toast/errorToast";
+import { successToast } from "@/modules/shared/components/ui/toast/successToast";
 
 const FormUploadMaterial = ({
   subjectAvailable,
@@ -38,16 +41,12 @@ const FormUploadMaterial = ({
 
   useEffect(() => {
     if (state?.success) {
-      toast.success(state.message || "Material created successfully", {
-        position: "bottom-right",
-        duration: 5000,
-        style: {
-          color: "oklch(62.7% 0.194 149.214)",
-        },
-      });
+      successToast(state.message![0], state.message![1]);
 
       formRef.current?.reset();
       redirect("/");
+    } else if (state?.errors?.general) {
+      errorToast(state.message![0], state.message![1]);
     }
   }, [state]);
 
