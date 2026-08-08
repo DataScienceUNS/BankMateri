@@ -48,6 +48,14 @@ const FormUploadMaterial = ({
 
       formRef.current?.reset();
       redirect("/");
+    } else if (state?.errors?.general) {
+      toast.error(state.errors.general[0], {
+        position: "bottom-right",
+        duration: 5000,
+        style: {
+          color: "oklch(57.7% 0.245 27.325)",
+        },
+      });
     }
   }, [state]);
 
