@@ -5,18 +5,12 @@ import { uploadMaterialSchema } from "@/modules/uploadMaterial/schemas/uploadMat
 import { z } from "zod";
 import { createNewMaterial } from "../repositories/createNewMaterial";
 import { Material } from "@/app/generated/prisma";
+import { ActionFormState } from "@/modules/shared/types/FormState";
 
 type UploadMaterialValues = z.infer<typeof uploadMaterialSchema>;
-type FormErrors = Partial<Record<keyof UploadMaterialValues, string[]>>;
-type FormState = {
-  success: boolean;
-  errors: FormErrors;
-  values: Partial<UploadMaterialValues>;
-  message?: string;
-  data?: Material;
-} | null;
+type ActionState = ActionFormState<UploadMaterialValues, Material>;
 
-export const handlingSubmitForm = async (_prevState: FormState, formData: FormData): Promise<FormState> => {
+export const handlingSubmitForm = async (_prevState: ActionState, formData: FormData): Promise<ActionState> => {
   const rawValues = {
     subject: formData.get("subject") as string,
     category: formData.get("category") as string,
@@ -34,6 +28,7 @@ export const handlingSubmitForm = async (_prevState: FormState, formData: FormDa
   if (!validated.success) {
     return {
       success: false,
+      message: ["Validation failed", "Please check the form for errors and try again."],
       errors: z.flattenError(validated.error).fieldErrors as Record<string, string[]>,
       values: rawValues,
     };
@@ -43,8 +38,9 @@ export const handlingSubmitForm = async (_prevState: FormState, formData: FormDa
   if (!userData.success)
     return {
       success: false,
+      message: ["User not authenticated", "Please log in to create a material."],
       errors: {
-        subject: ["User not authenticated"],
+        general: true,
       },
       values: rawValues,
     };
@@ -52,10 +48,12 @@ export const handlingSubmitForm = async (_prevState: FormState, formData: FormDa
   const insertedMaterial = await createNewMaterial(validated.data, userData.data?.user.id as string);
 
   return {
-    success: true,
-    errors: {},
+    success: insertedMaterial.success,
+    errors: {
+      general: insertedMaterial.success ? undefined : true,
+    },
     values: validated.data,
-    message: "Material created successfully",
+    message: insertedMaterial.message,
     data: insertedMaterial.data as Material,
   };
 };
