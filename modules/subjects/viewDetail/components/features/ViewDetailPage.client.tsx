@@ -5,6 +5,7 @@ import { ArrowLeft, BookOpen } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import SearchAndFilter from "../ui/SearchAndFilter";
+import MaterialCard from "@/modules/shared/components/ui/cards/MaterialCard";
 
 type ViewDetailPageClientProps = {
   detail: {
@@ -55,6 +56,9 @@ const ViewDetailPageClient = ({ detail }: ViewDetailPageClientProps) => {
 
       <main className="mt-8">
         <SearchAndFilter />
+        <div className="mt-6">
+          <MaterialCard />
+        </div>
       </main>
     </div>
   );
