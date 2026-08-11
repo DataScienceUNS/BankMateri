@@ -57,7 +57,19 @@ const ViewDetailPageClient = ({ detail }: ViewDetailPageClientProps) => {
       <main className="mt-8">
         <SearchAndFilter />
         <div className="mt-6">
-          <MaterialCard />
+          {detail?.materials.map((material) => (
+            <MaterialCard
+              key={material.id}
+              title={material.title}
+              subject={detail?.name || ""}
+              description={material.description || ""}
+              category={material.category}
+              meetingNo={material.meeting_number || 0}
+              source={material.source}
+              createdAt={material.created_at}
+              externalUrl={material.content_url}
+            />
+          ))}
         </div>
       </main>
     </div>
