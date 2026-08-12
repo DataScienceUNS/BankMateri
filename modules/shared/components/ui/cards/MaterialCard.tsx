@@ -1,3 +1,5 @@
+import { MaterialCategoryLists } from "@/config/MaterialCategoryLists";
+import { SupportedCloudStorage } from "@/config/SupportedCloudStorage";
 import { Badge } from "@/modules/shadcn/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader } from "@/modules/shadcn/ui/card";
 import { Bookmark, Calendar, ExternalLink } from "lucide-react";
@@ -32,17 +34,17 @@ const MaterialCard = ({
   });
 
   return (
-    <Card className="w-full max-w-sm py-5 gap-0">
+    <Card className="w-full max-w-94 py-5 gap-0">
       {/* Header */}
-      <CardHeader className="py-0 px-5 flex items-center justify-between">
+      <CardHeader className="py-0 px-5 flex items-start justify-between gap-4 flex-1">
         <div className="space-y-1.5">
-          <h3 className="text-base font-semibold text-gray-900 line-clamp-1">{title}</h3>
+          <h3 className="text-base font-semibold text-gray-900 line-clamp-2">{title}</h3>
           <div className="flex items-center gap-1.5">
             <span className="h-2 w-2 rounded-full bg-blue-500" />
             <span className="text-xs text-gray-500">{subject}</span>
           </div>
         </div>
-        <Bookmark className="-mt-4 h-5 w-5 shrink-0 text-gray-400" />
+        <Bookmark className="mt-2 h-5 w-5 shrink-0 text-gray-400" />
       </CardHeader>
 
       <CardContent className="p-0 px-5">
@@ -51,9 +53,9 @@ const MaterialCard = ({
 
         {/* Tags */}
         <div className="mt-4 flex flex-wrap gap-2">
-          <Badge variant="secondary">{category}</Badge>
-          <Badge variant="secondary">#Meeting {meetingNo}</Badge>
-          <Badge variant="secondary">{source}</Badge>
+          <Badge variant="secondary">{MaterialCategoryLists.find((c) => c.value === category)?.label}</Badge>
+          <Badge variant="secondary">Meeting {meetingNo}</Badge>
+          <Badge variant="secondary">{SupportedCloudStorage.find((s) => s.value === source)?.label}</Badge>
         </div>
       </CardContent>
 

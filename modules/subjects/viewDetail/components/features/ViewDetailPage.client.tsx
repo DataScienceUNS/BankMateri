@@ -56,7 +56,7 @@ const ViewDetailPageClient = ({ detail }: ViewDetailPageClientProps) => {
 
       <main className="mt-8">
         <SearchAndFilter />
-        <div className="mt-6">
+        <div className="mt-6 grid grid-cols-3 gap-4">
           {detail?.materials.map((material) => (
             <MaterialCard
               key={material.id}
