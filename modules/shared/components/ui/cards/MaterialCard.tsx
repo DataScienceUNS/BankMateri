@@ -36,7 +36,7 @@ const MaterialCard = ({
       {/* Header */}
       <CardHeader className="py-0 px-5 flex items-center justify-between">
         <div className="space-y-1.5">
-          <h3 className="text-base font-semibold text-gray-900">{title}</h3>
+          <h3 className="text-base font-semibold text-gray-900 line-clamp-1">{title}</h3>
           <div className="flex items-center gap-1.5">
             <span className="h-2 w-2 rounded-full bg-blue-500" />
             <span className="text-xs text-gray-500">{subject}</span>
