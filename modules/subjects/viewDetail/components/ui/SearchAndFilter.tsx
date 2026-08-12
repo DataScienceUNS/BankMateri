@@ -5,31 +5,51 @@ import { NativeSelect, NativeSelectOption } from "@/modules/shadcn/ui/native-sel
 import { Search } from "lucide-react";
 import React from "react";
 
-const SearchAndFilter = () => {
+interface SearchAndFilterProps {
+  search: string;
+  onSearchChange: (value: string) => void;
+  category: string;
+  onCategoryChange: (value: string) => void;
+  year: string;
+  onYearChange: (value: string) => void;
+}
+
+const SearchAndFilter = ({
+  search,
+  onSearchChange,
+  category,
+  onCategoryChange,
+  year,
+  onYearChange,
+}: SearchAndFilterProps) => {
   return (
     <div className="h-11 flex *:h-full gap-2">
       <InputGroup className="px-2">
-        <InputGroupInput className="mx-2" placeholder="Search materials..." />
+        <InputGroupInput
+          className="mx-2"
+          placeholder="Search materials..."
+          value={search}
+          onChange={(e) => onSearchChange(e.target.value)}
+        />
         <InputGroupAddon>
           <Search />
         </InputGroupAddon>
-        <InputGroupAddon align="inline-end"></InputGroupAddon>
       </InputGroup>
 
-      <NativeSelect className="*:h-full w-50">
+      <NativeSelect value={category} onChange={(e) => onCategoryChange(e.target.value)} className="*:h-full w-50">
         <NativeSelectOption value="">All Categories</NativeSelectOption>
-        {MaterialCategoryLists.map((category) => (
-          <NativeSelectOption className="h-full" key={category.value} value={category.value}>
-            {category.label}
+        {MaterialCategoryLists.map((cat) => (
+          <NativeSelectOption className="h-full" key={cat.value} value={cat.value}>
+            {cat.label}
           </NativeSelectOption>
         ))}
       </NativeSelect>
 
-      <NativeSelect className="*:h-full w-40">
+      <NativeSelect value={year} onChange={(e) => onYearChange(e.target.value)} className="*:h-full w-40">
         <NativeSelectOption value="">All Years</NativeSelectOption>
-        {AvailableAcademicYears.map((year) => (
-          <NativeSelectOption className="h-full" key={year} value={year}>
-            {year.toString()}
+        {AvailableAcademicYears.map((yr) => (
+          <NativeSelectOption className="h-full" key={yr} value={yr}>
+            {yr}
           </NativeSelectOption>
         ))}
       </NativeSelect>

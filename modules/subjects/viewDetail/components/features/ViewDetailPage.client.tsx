@@ -20,6 +20,7 @@ type ViewDetailPageClientProps = {
       meeting_number: number | null;
       source: string;
       title: string;
+      academic_year: string;
       uploader: {
         full_name: string;
       };
@@ -30,6 +31,24 @@ type ViewDetailPageClientProps = {
 };
 
 const ViewDetailPageClient = ({ detail }: ViewDetailPageClientProps) => {
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const [selectedCategory, setSelectedCategory] = React.useState("");
+  const [selectedYear, setSelectedYear] = React.useState("");
+
+  const filteredMaterials = React.useMemo(() => {
+    if (!detail?.materials) return [];
+
+    return detail.materials.filter((material) => {
+      const matchesSearch =
+        material.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (material.description || "").toLowerCase().includes(searchQuery.toLowerCase());
+
+      const matchesCategory = selectedCategory ? material.category === selectedCategory : true;
+      const matchesYear = selectedYear ? material.academic_year === selectedYear : true;
+      return matchesSearch && matchesCategory && matchesYear;
+    });
+  }, [detail?.materials, searchQuery, selectedCategory, selectedYear]);
+
   return (
     <div className="mt-8">
       <Link
@@ -55,9 +74,16 @@ const ViewDetailPageClient = ({ detail }: ViewDetailPageClientProps) => {
       </header>
 
       <main className="mt-8">
-        <SearchAndFilter />
+        <SearchAndFilter
+          search={searchQuery}
+          onSearchChange={setSearchQuery}
+          category={selectedCategory}
+          onCategoryChange={setSelectedCategory}
+          year={selectedYear}
+          onYearChange={setSelectedYear}
+        />
         <div className="mt-6 grid grid-cols-3 gap-4">
-          {detail?.materials.map((material) => (
+          {filteredMaterials.map((material) => (
             <MaterialCard
               key={material.id}
               id={material.id}
