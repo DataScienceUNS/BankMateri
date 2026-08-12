@@ -60,8 +60,10 @@ const ViewDetailPageClient = ({ detail }: ViewDetailPageClientProps) => {
           {detail?.materials.map((material) => (
             <MaterialCard
               key={material.id}
+              id={material.id}
               title={material.title}
-              subject={detail?.name || ""}
+              subjectCode={detail?.code || ""}
+              subjectName={detail?.name || ""}
               description={material.description || ""}
               category={material.category}
               meetingNo={material.meeting_number || 0}

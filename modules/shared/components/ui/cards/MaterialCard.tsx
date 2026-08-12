@@ -7,8 +7,10 @@ import Link from "next/link";
 import React from "react";
 
 interface MaterialCardProps {
+  id: string;
   title: string;
-  subject: string;
+  subjectName: string;
+  subjectCode: string;
   description: string;
   category: string;
   meetingNo: number;
@@ -18,8 +20,10 @@ interface MaterialCardProps {
 }
 
 const MaterialCard = ({
+  id,
   title,
-  subject,
+  subjectName,
+  subjectCode,
   description,
   category,
   meetingNo,
@@ -38,10 +42,17 @@ const MaterialCard = ({
       {/* Header */}
       <CardHeader className="py-0 px-5 flex items-start justify-between gap-4 flex-1">
         <div className="space-y-1.5">
-          <h3 className="text-base font-semibold text-gray-900 line-clamp-2">{title}</h3>
+          <Link
+            href={`/subjects/${subjectCode}/materials/${id}`}
+            className="text-base font-semibold text-gray-900 line-clamp-2 hover:underline cursor-pointer"
+          >
+            {title}
+          </Link>
           <div className="flex items-center gap-1.5">
             <span className="h-2 w-2 rounded-full bg-blue-500" />
-            <span className="text-xs text-gray-500">{subject}</span>
+            <Link href={`/subjects/${subjectCode}`} className="text-xs text-gray-500 hover:underline cursor-pointer">
+              {subjectName}
+            </Link>
           </div>
         </div>
         <Bookmark className="mt-2 h-5 w-5 shrink-0 text-gray-400" />
