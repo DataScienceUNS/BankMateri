@@ -19,8 +19,6 @@ import { Upload } from "lucide-react";
 import { Button } from "@/modules/shadcn/ui/button";
 import { Input } from "@/modules/shadcn/ui/input";
 import { Label } from "@/modules/shadcn/ui/label";
-import { toast } from "sonner";
-import { InterFont } from "@/providers/fonts/Font.provider";
 import { errorToast } from "@/modules/shared/components/ui/toast/errorToast";
 import { successToast } from "@/modules/shared/components/ui/toast/successToast";
 

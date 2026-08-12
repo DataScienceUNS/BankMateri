@@ -1,6 +1,6 @@
 import React from 'react';
-import SubjectPage from "@/modules/subject/components/features/SubjectPage";
 import LoadingPage from "@/modules/shared/components/featured/LoadingPage";
+import SubjectPage from "@/modules/subjects/overviewAll/components/features/SubjectPage";
 
 const page = () => {
     return (
