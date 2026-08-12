@@ -24,6 +24,7 @@ export const createNewMaterial = async (formData: z.infer<typeof uploadMaterialS
           material_type: formData.materialType,
           academic_year: formData.academicYear,
           meeting_number: formData.meetingNo,
+          description: formData.description,
           uploader_id,
         },
       });
