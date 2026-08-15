@@ -1,7 +1,10 @@
 import { MaterialCategoryLists } from "@/config/MaterialCategoryLists";
 import { SupportedCloudStorage } from "@/config/SupportedCloudStorage";
+import { getCurrentUser } from "@/modules/auth/lib/getCurrentUser";
 import { Badge } from "@/modules/shadcn/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader } from "@/modules/shadcn/ui/card";
+import { cn } from "@/modules/shadcn/utils";
+import { useUser } from "@/providers/auth/auth-provider";
 import { Bookmark, Calendar, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -17,6 +20,8 @@ interface MaterialCardProps {
   source: string;
   createdAt: Date;
   externalUrl: string;
+  isBookmarked: boolean;
+  handleBookmarkClick: (materialId: string) => void | Promise<void>;
 }
 
 const MaterialCard = ({
@@ -30,7 +35,10 @@ const MaterialCard = ({
   source,
   createdAt,
   externalUrl,
+  isBookmarked,
+  handleBookmarkClick,
 }: MaterialCardProps) => {
+  const user = useUser();
   const formattedDate = new Date(createdAt).toLocaleDateString("en-US", {
     month: "numeric",
     day: "numeric",
@@ -55,7 +63,16 @@ const MaterialCard = ({
             </Link>
           </div>
         </div>
-        <Bookmark className="mt-2 h-5 w-5 shrink-0 text-gray-400" />
+        {user && (
+          <Bookmark
+            onClick={() => handleBookmarkClick(id)}
+            className={cn(
+              "mt-2 h-5 w-5 shrink-0 text-gray-400",
+              "cursor-pointer",
+              isBookmarked && "text-amber-400 fill-amber-400",
+            )}
+          />
+        )}
       </CardHeader>
 
       <CardContent className="p-0 px-5">
