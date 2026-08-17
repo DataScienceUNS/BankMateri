@@ -7,7 +7,7 @@ import React from "react";
 import SearchAndFilter from "../ui/SearchAndFilter";
 import MaterialCard from "@/modules/shared/components/ui/cards/MaterialCard";
 
-type ViewDetailPageClientProps = {
+type SubjectDetailPageClientProps = {
   detail: {
     code: string;
     hex_color: string;
@@ -30,7 +30,7 @@ type ViewDetailPageClientProps = {
   } | null;
 };
 
-const ViewDetailPageClient = ({ detail }: ViewDetailPageClientProps) => {
+const SubjectDetailPageClient = ({ detail }: SubjectDetailPageClientProps) => {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [selectedCategory, setSelectedCategory] = React.useState("");
   const [selectedYear, setSelectedYear] = React.useState("");
@@ -104,4 +104,4 @@ const ViewDetailPageClient = ({ detail }: ViewDetailPageClientProps) => {
   );
 };
 
-export default ViewDetailPageClient;
+export default SubjectDetailPageClient;
