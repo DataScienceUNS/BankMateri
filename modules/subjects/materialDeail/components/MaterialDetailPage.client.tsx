@@ -1,3 +1,9 @@
+import { MaterialCategoryLists } from "@/config/MaterialCategoryLists";
+import { Button } from "@/modules/shadcn/ui/button";
+import { Separator } from "@/modules/shadcn/ui/separator";
+import { cn } from "@/modules/shadcn/utils";
+import { ArrowLeft, Bookmark, ExternalLink, Flag } from "lucide-react";
+import Link from "next/link";
 import React from "react";
 
 interface MaterialDetailPageClientProps {
@@ -12,6 +18,7 @@ interface MaterialDetailPageClientProps {
   subject: {
     code: string;
     name: string;
+    hex_color: string;
   };
   title: string;
   updated_at: Date;
@@ -23,9 +30,102 @@ interface MaterialDetailPageClientProps {
 
 const MaterialDetailPageClient = async ({ materialPayload }: { materialPayload: MaterialDetailPageClientProps }) => {
   return (
-    <div>
-      <h1>{materialPayload?.title}</h1>
-      <p>{materialPayload?.description}</p>
+    <div className="mt-8">
+      {/* Back Button */}
+      <Link
+        href={`/subjects/${materialPayload.subject.code}`}
+        className="text-neutral-600 hover:text-neutral-900 text-sm cursor-pointer p-0 flex items-center gap-2"
+      >
+        <ArrowLeft size={16} /> {materialPayload.subject.name}
+      </Link>
+
+      <div className="mt-6 flex gap-8">
+        {/* Material Details */}
+        <div className="flex-1">
+          {/* Material Header */}
+          <div
+            className={cn(
+              "text-xs font-normal bg-muted py-1 px-2 w-fit rounded-md",
+              "text-primary bg-primary/6 border border-primary/12",
+            )}
+          >
+            {MaterialCategoryLists.find((cat) => cat.value === materialPayload.category)?.label ||
+              materialPayload.category}
+          </div>
+          <div className="mt-2 space-y-4">
+            <h1 className="text-[26px] font-semibold text-neutral-800">{materialPayload.title}</h1>
+            <p className="text-muted-foreground">{materialPayload.description}</p>
+          </div>
+
+          {/* Material Metadata */}
+          <div className="mt-10 border rounded-xl">
+            <div className="flex justify-between text-sm py-3 px-6">
+              <span className="text-muted-foreground">Subject</span>
+              <span className="font-medium">{materialPayload.subject.name}</span>
+            </div>
+            <Separator />
+            <div className="flex justify-between text-sm py-3 px-6">
+              <span className="text-muted-foreground">Category</span>
+              <span className="font-medium">
+                {MaterialCategoryLists.find((cat) => cat.value === materialPayload.category)?.label ||
+                  materialPayload.category}
+              </span>
+            </div>
+            <Separator />
+            <div className="flex justify-between text-sm py-3 px-6">
+              <span className="text-muted-foreground">Meeting Number</span>
+              <span className="font-medium">Meeting {materialPayload.meeting_number}</span>
+            </div>
+            <Separator />
+            <div className="flex justify-between text-sm py-3 px-6">
+              <span className="text-muted-foreground">Academic Year</span>
+              <span className="font-medium">{materialPayload.academic_year}</span>
+            </div>
+            <Separator />
+            <div className="flex justify-between text-sm py-3 px-6">
+              <span className="text-muted-foreground">Uploader</span>
+              <span className="font-medium">{materialPayload.uploader.full_name}</span>
+            </div>
+            <Separator />
+            <div className="flex justify-between text-sm py-3 px-6">
+              <span className="text-muted-foreground">Source</span>
+              <span className="font-medium">{materialPayload.source}</span>
+            </div>
+            <Separator />
+            <div className="flex justify-between text-sm py-3 px-6">
+              <span className="text-muted-foreground">Upload Date</span>
+              <span className="font-medium">{materialPayload.created_at.toLocaleDateString()}</span>
+            </div>
+            <Separator />
+            <div className="flex justify-between text-sm py-3 px-6">
+              <span className="text-muted-foreground">Latest Update </span>
+              <span className="font-medium">
+                {materialPayload.updated_at ? materialPayload.updated_at.toLocaleDateString() : "N/A"}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Material Actions */}
+        <div className="w-80 h-fit flex flex-col justify-between border rounded-xl p-4">
+          <Link href={materialPayload.content_url} target="_blank" rel="noopener noreferrer">
+            <Button className="py-5 cursor-pointer w-full">
+              Open Material <ExternalLink size={16} />
+            </Button>
+          </Link>
+          <span className="text-xs text-center text-muted-foreground mt-2">Redirects to {materialPayload.source}</span>
+          <div className="flex w-full gap-2 mt-4">
+            <Button className="flex-1 py-5 text-neutral-800" variant="outline">
+              <Bookmark />
+              Save
+            </Button>
+            <Button className="flex-1 py-5 text-neutral-800" variant="outline">
+              <Flag />
+              Report
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

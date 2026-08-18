@@ -29,6 +29,7 @@ export const getMaterialDetail = createAction(async (materialId: string) => {
         select: {
           name: true,
           code: true,
+          hex_color: true,
         },
       },
     },
