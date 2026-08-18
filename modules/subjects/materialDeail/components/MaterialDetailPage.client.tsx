@@ -1,4 +1,5 @@
 import { MaterialCategoryLists } from "@/config/MaterialCategoryLists";
+import { SupportedCloudStorage } from "@/config/SupportedCloudStorage";
 import { Button } from "@/modules/shadcn/ui/button";
 import { Separator } from "@/modules/shadcn/ui/separator";
 import { cn } from "@/modules/shadcn/utils";
@@ -89,7 +90,9 @@ const MaterialDetailPageClient = async ({ materialPayload }: { materialPayload: 
             <Separator />
             <div className="flex justify-between text-sm py-3 px-6">
               <span className="text-muted-foreground">Source</span>
-              <span className="font-medium">{materialPayload.source}</span>
+              <span className="font-medium">
+                {SupportedCloudStorage.find((s) => s.value === materialPayload.source)?.label || materialPayload.source}
+              </span>
             </div>
             <Separator />
             <div className="flex justify-between text-sm py-3 px-6">
@@ -113,7 +116,10 @@ const MaterialDetailPageClient = async ({ materialPayload }: { materialPayload: 
               Open Material <ExternalLink size={16} />
             </Button>
           </Link>
-          <span className="text-xs text-center text-muted-foreground mt-2">Redirects to {materialPayload.source}</span>
+          <span className="text-xs text-center text-muted-foreground mt-2">
+            Redirects to{" "}
+            {SupportedCloudStorage.find((s) => s.value === materialPayload.source)?.label || materialPayload.source}
+          </span>
           <div className="flex w-full gap-2 mt-4">
             <Button className="flex-1 py-5 text-neutral-800" variant="outline">
               <Bookmark />
