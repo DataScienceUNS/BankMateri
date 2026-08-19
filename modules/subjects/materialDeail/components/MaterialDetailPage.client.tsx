@@ -7,6 +7,8 @@ import { cn } from "@/modules/shadcn/utils";
 import { ArrowLeft, Bookmark, ExternalLink, Flag } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { addMaterialToBookmark } from "../actions/addMaterialToBookmark";
+import { removeMaterialFromBookmark } from "../actions/removeMaterialFromBookmark";
 
 interface MaterialDetailPageClientProps {
   academic_year: string;
@@ -37,7 +39,13 @@ interface MaterialDetailPageClientProps {
 const MaterialDetailPageClient = ({ materialPayload }: { materialPayload: MaterialDetailPageClientProps }) => {
   const [bookmarkStatus, setBookmarkStatus] = React.useState<boolean>(materialPayload.bookmarked_by.length > 0);
   const handleBookmarkClick = async () => {
-    setBookmarkStatus((prev) => !prev);
+    if (bookmarkStatus) {
+      await removeMaterialFromBookmark({ materialId: materialPayload.id });
+      setBookmarkStatus(false);
+    } else {
+      await addMaterialToBookmark({ materialId: materialPayload.id });
+      setBookmarkStatus(true);
+    }
   };
 
   return (

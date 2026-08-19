@@ -1,4 +1,4 @@
-"use client";
+"use server";
 
 import { getCurrentUser } from "@/modules/auth/lib/getCurrentUser";
 import { createAction } from "@/utils/actions/create-action";
