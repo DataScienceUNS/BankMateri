@@ -35,11 +35,13 @@ export const getMaterialDetail = createAction(async (materialId: string) => {
           hex_color: true,
         },
       },
-      bookmarked_by: {
-        where: {
-          user_id: user?.user.id,
-        },
-      },
+      bookmarked_by: user
+        ? {
+            where: {
+              user_id: user?.user.id,
+            },
+          }
+        : false,
     },
   });
 
