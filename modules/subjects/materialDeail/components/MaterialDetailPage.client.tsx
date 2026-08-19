@@ -1,3 +1,4 @@
+"use client";
 import { MaterialCategoryLists } from "@/config/MaterialCategoryLists";
 import { SupportedCloudStorage } from "@/config/SupportedCloudStorage";
 import { Button } from "@/modules/shadcn/ui/button";
@@ -27,9 +28,18 @@ interface MaterialDetailPageClientProps {
     full_name: string;
     profile_picture: string | null;
   };
+  bookmarked_by: {
+    user_id: string;
+    material_id: string;
+  }[];
 }
 
-const MaterialDetailPageClient = async ({ materialPayload }: { materialPayload: MaterialDetailPageClientProps }) => {
+const MaterialDetailPageClient = ({ materialPayload }: { materialPayload: MaterialDetailPageClientProps }) => {
+  const [bookmarkStatus, setBookmarkStatus] = React.useState<boolean>(materialPayload.bookmarked_by.length > 0);
+  const handleBookmarkClick = async () => {
+    setBookmarkStatus((prev) => !prev);
+  };
+
   return (
     <div className="mt-8">
       {/* Back Button */}
@@ -121,11 +131,15 @@ const MaterialDetailPageClient = async ({ materialPayload }: { materialPayload: 
             {SupportedCloudStorage.find((s) => s.value === materialPayload.source)?.label || materialPayload.source}
           </span>
           <div className="flex w-full gap-2 mt-4">
-            <Button className="flex-1 py-5 text-neutral-800" variant="outline">
-              <Bookmark />
-              Save
+            <Button
+              className="flex-1 py-5 text-neutral-800 cursor-pointer"
+              variant="outline"
+              onClick={handleBookmarkClick}
+            >
+              <Bookmark className={bookmarkStatus ? "stroke-amber-500 fill-amber-500" : ""} />
+              {bookmarkStatus ? "Saved" : "Save"}
             </Button>
-            <Button className="flex-1 py-5 text-neutral-800" variant="outline">
+            <Button className="flex-1 py-5 text-neutral-800 cursor-pointer" variant="outline">
               <Flag />
               Report
             </Button>
