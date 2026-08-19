@@ -23,6 +23,7 @@ export const getDetailSubject = createAction(async (code: string) => {
           source: true,
           content_url: true,
           created_at: true,
+          academic_year: true,
           uploader: {
             select: {
               full_name: true,
