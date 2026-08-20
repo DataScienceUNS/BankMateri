@@ -10,6 +10,15 @@ import React from "react";
 import { addMaterialToBookmark } from "../actions/addMaterialToBookmark";
 import { removeMaterialFromBookmark } from "../actions/removeMaterialFromBookmark";
 import { useUser } from "@/providers/auth/auth-provider";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/modules/shadcn/ui/dialog";
+import ReportDialog from "./ui/ReportDialog";
 
 interface MaterialDetailPageClientProps {
   academic_year: string;
@@ -39,6 +48,8 @@ interface MaterialDetailPageClientProps {
 
 const MaterialDetailPageClient = ({ materialPayload }: { materialPayload: MaterialDetailPageClientProps }) => {
   const user = useUser();
+
+  const [dialogReportOpen, setDialogReportOpen] = React.useState(false);
   const [bookmarkStatus, setBookmarkStatus] = React.useState<boolean>(materialPayload.bookmarked_by?.length > 0);
   const handleBookmarkClick = async () => {
     if (bookmarkStatus) {
@@ -140,8 +151,8 @@ const MaterialDetailPageClient = ({ materialPayload }: { materialPayload: Materi
             Redirects to{" "}
             {SupportedCloudStorage.find((s) => s.value === materialPayload.source)?.label || materialPayload.source}
           </span>
-          <div className="flex w-full gap-2 mt-4">
-            {user?.user && (
+          {user?.user && (
+            <div className="flex w-full gap-2 mt-4">
               <Button
                 className="flex-1 py-5 text-neutral-800 cursor-pointer"
                 variant="outline"
@@ -150,12 +161,17 @@ const MaterialDetailPageClient = ({ materialPayload }: { materialPayload: Materi
                 <Bookmark className={bookmarkStatus ? "stroke-amber-500 fill-amber-500" : ""} />
                 {bookmarkStatus ? "Saved" : "Save"}
               </Button>
-            )}
-            <Button className="flex-1 py-5 text-neutral-800 cursor-pointer" variant="outline">
-              <Flag />
-              Report
-            </Button>
-          </div>
+              <Dialog open={dialogReportOpen} onOpenChange={setDialogReportOpen}>
+                <DialogTrigger asChild>
+                  <Button className="flex-1 py-5 text-neutral-800 cursor-pointer" variant="outline">
+                    <Flag />
+                    Report
+                  </Button>
+                </DialogTrigger>
+                <ReportDialog materialId={materialPayload.id} setDialogReportOpen={setDialogReportOpen} />
+              </Dialog>
+            </div>
+          )}
         </div>
       </div>
     </div>
