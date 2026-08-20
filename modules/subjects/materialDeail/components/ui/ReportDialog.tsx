@@ -14,9 +14,9 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Textarea } from "@/modules/shadcn/ui/textarea";
 import { handlingReportMaterial } from "../../actions/handlingReportMaterial";
 import { ReportReasonSelection } from "@/config/ReportReasonSelection";
-import React, { useEffect } from "react";
 import { errorToast } from "@/modules/shared/components/ui/toast/errorToast";
 import { successToast } from "@/modules/shared/components/ui/toast/successToast";
+import React from "react";
 
 const ReportDialog = ({
   materialId,
@@ -28,7 +28,7 @@ const ReportDialog = ({
   const formRef = React.useRef<HTMLFormElement>(null);
   const [state, formAction, isPending] = React.useActionState(handlingReportMaterial, null);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (state?.success) {
       formRef.current?.reset();
       setDialogReportOpen(false);
@@ -36,7 +36,7 @@ const ReportDialog = ({
     } else if (state?.errors.general) {
       errorToast(state.message![0], state.message![1]);
     }
-  }, [state]);
+  }, [state, setDialogReportOpen]);
 
   return (
     <DialogContent>
