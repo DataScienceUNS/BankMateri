@@ -6,6 +6,8 @@ import { reportingMaterialSchema } from "../schema/reportMaterialSchema";
 import { getCurrentUser } from "@/modules/auth/lib/getCurrentUser";
 import { createReportMaterial } from "../repositories/createReportMaterial";
 import { ReportReasonSelection } from "@/config/ReportReasonSelection";
+import { reporter } from "next/dist/trace/report";
+import { prisma } from "@/utils/databases/prisma";
 
 type ReportMaterialValues = z.infer<typeof reportingMaterialSchema>;
 type ActionState = ActionFormState<ReportMaterialValues, void>;
@@ -48,6 +50,24 @@ export async function handlingReportMaterial(prevState: ActionState, formData: F
       },
       values: rawValues,
     };
+
+  const checkExistingReport = await prisma.materialReport.findFirst({
+    where: {
+      reporter_id: userData.data?.user.id,
+      material_id: rawValues.materialId,
+      status: "pending",
+    },
+  });
+  if (checkExistingReport) {
+    return {
+      success: false,
+      message: ["You have already reported this material.", "Please wait for the review process to complete."],
+      errors: {
+        general: true,
+      },
+      values: rawValues,
+    };
+  }
 
   const insertedReport = await createReportMaterial({
     reason: reason,
