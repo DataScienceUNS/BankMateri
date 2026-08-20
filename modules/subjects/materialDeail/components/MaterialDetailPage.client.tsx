@@ -48,6 +48,8 @@ interface MaterialDetailPageClientProps {
 
 const MaterialDetailPageClient = ({ materialPayload }: { materialPayload: MaterialDetailPageClientProps }) => {
   const user = useUser();
+
+  const [dialogReportOpen, setDialogReportOpen] = React.useState(false);
   const [bookmarkStatus, setBookmarkStatus] = React.useState<boolean>(materialPayload.bookmarked_by?.length > 0);
   const handleBookmarkClick = async () => {
     if (bookmarkStatus) {
@@ -159,14 +161,14 @@ const MaterialDetailPageClient = ({ materialPayload }: { materialPayload: Materi
                 <Bookmark className={bookmarkStatus ? "stroke-amber-500 fill-amber-500" : ""} />
                 {bookmarkStatus ? "Saved" : "Save"}
               </Button>
-              <Dialog>
+              <Dialog open={dialogReportOpen} onOpenChange={setDialogReportOpen}>
                 <DialogTrigger asChild>
                   <Button className="flex-1 py-5 text-neutral-800 cursor-pointer" variant="outline">
                     <Flag />
                     Report
                   </Button>
                 </DialogTrigger>
-                <ReportDialog materialId={materialPayload.id} />
+                <ReportDialog materialId={materialPayload.id} setDialogReportOpen={setDialogReportOpen} />
               </Dialog>
             </div>
           )}

@@ -61,7 +61,7 @@ export async function handlingReportMaterial(prevState: ActionState, formData: F
     errors: {
       general: insertedReport.success ? undefined : true,
     },
-    values: validated.data,
+    values: insertedReport.success ? {} : rawValues,
     message: ["Report submitted successfully.", "Thank you for helping us maintain the quality of our materials."],
     data: undefined,
   };
