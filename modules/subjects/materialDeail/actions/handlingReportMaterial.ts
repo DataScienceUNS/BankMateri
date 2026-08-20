@@ -1,0 +1,68 @@
+"use server";
+
+import { ActionFormState } from "@/modules/shared/types/FormState";
+import { z } from "zod";
+import { reportingMaterialSchema } from "../schema/reportMaterialSchema";
+import { getCurrentUser } from "@/modules/auth/lib/getCurrentUser";
+import { createReportMaterial } from "../repositories/createReportMaterial";
+import { ReportReasonSelection } from "@/config/ReportReasonSelection";
+
+type ReportMaterialValues = z.infer<typeof reportingMaterialSchema>;
+type ActionState = ActionFormState<ReportMaterialValues, void>;
+
+export async function handlingReportMaterial(prevState: ActionState, formData: FormData): Promise<ActionState> {
+  const rawValues = {
+    reason: formData.get("reason") as string,
+    details: formData.get("details") as string,
+    materialId: formData.get("materialId") as string,
+  };
+
+  const validated = reportingMaterialSchema.safeParse(rawValues);
+
+  if (!validated.success)
+    return {
+      success: false,
+      message: ["Validation failed", "Please check the form for errors and try again."],
+      errors: z.flattenError(validated.error).fieldErrors as Record<string, string[]>,
+      values: rawValues,
+    };
+
+  const userData = await getCurrentUser();
+  if (!userData.success)
+    return {
+      success: false,
+      message: ["User not authenticated", "Please log in to report a material."],
+      errors: {
+        general: true,
+      },
+      values: rawValues,
+    };
+
+  const reason = ReportReasonSelection.find((r) => r.value === validated.data.reason)?.label;
+  if (!reason)
+    return {
+      success: false,
+      message: ["Invalid report reason", "Please select a valid reason for reporting this material."],
+      errors: {
+        reason: ["Invalid report reason"],
+      },
+      values: rawValues,
+    };
+
+  const insertedReport = await createReportMaterial({
+    reason: reason,
+    details: validated.data.details,
+    materialId: rawValues.materialId,
+    reporterId: userData.data?.user.id as string,
+  });
+
+  return {
+    success: insertedReport.success,
+    errors: {
+      general: insertedReport.success ? undefined : true,
+    },
+    values: validated.data,
+    message: ["Report submitted successfully.", "Thank you for helping us maintain the quality of our materials."],
+    data: undefined,
+  };
+}

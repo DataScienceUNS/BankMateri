@@ -166,7 +166,7 @@ const MaterialDetailPageClient = ({ materialPayload }: { materialPayload: Materi
                     Report
                   </Button>
                 </DialogTrigger>
-                <ReportDialog />
+                <ReportDialog materialId={materialPayload.id} />
               </Dialog>
             </div>
           )}
