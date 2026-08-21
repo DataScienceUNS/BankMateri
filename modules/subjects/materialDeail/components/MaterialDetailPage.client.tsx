@@ -10,14 +10,7 @@ import React from "react";
 import { addMaterialToBookmark } from "../actions/addMaterialToBookmark";
 import { removeMaterialFromBookmark } from "../actions/removeMaterialFromBookmark";
 import { useUser } from "@/providers/auth/auth-provider";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/modules/shadcn/ui/dialog";
+import { Dialog, DialogTrigger } from "@/modules/shadcn/ui/dialog";
 import ReportDialog from "./ui/ReportDialog";
 
 interface MaterialDetailPageClientProps {
