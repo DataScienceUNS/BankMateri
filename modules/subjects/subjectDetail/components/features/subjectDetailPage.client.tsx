@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/modules/shadcn/ui/badge";
 import { ArrowLeft, BookOpen } from "lucide-react";
 import Link from "next/link";
@@ -35,19 +34,17 @@ const SubjectDetailPageClient = ({ detail }: SubjectDetailPageClientProps) => {
   const [selectedCategory, setSelectedCategory] = React.useState("");
   const [selectedYear, setSelectedYear] = React.useState("");
 
-  const filteredMaterials = React.useMemo(() => {
-    if (!detail?.materials) return [];
+  const filteredMaterials = detail?.materials
+    ? detail.materials.filter((material) => {
+        const matchesSearch =
+          material.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          (material.description || "").toLowerCase().includes(searchQuery.toLowerCase());
 
-    return detail.materials.filter((material) => {
-      const matchesSearch =
-        material.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (material.description || "").toLowerCase().includes(searchQuery.toLowerCase());
-
-      const matchesCategory = selectedCategory ? material.category === selectedCategory : true;
-      const matchesYear = selectedYear ? material.academic_year === selectedYear : true;
-      return matchesSearch && matchesCategory && matchesYear;
-    });
-  }, [detail?.materials, searchQuery, selectedCategory, selectedYear]);
+        const matchesCategory = selectedCategory ? material.category === selectedCategory : true;
+        const matchesYear = selectedYear ? material.academic_year === selectedYear : true;
+        return matchesSearch && matchesCategory && matchesYear;
+      })
+    : [];
 
   return (
     <div className="mt-8">

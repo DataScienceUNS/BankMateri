@@ -6,13 +6,12 @@ import { reportingMaterialSchema } from "../schema/reportMaterialSchema";
 import { getCurrentUser } from "@/modules/auth/lib/getCurrentUser";
 import { createReportMaterial } from "../repositories/createReportMaterial";
 import { ReportReasonSelection } from "@/config/ReportReasonSelection";
-import { reporter } from "next/dist/trace/report";
 import { prisma } from "@/utils/databases/prisma";
 
 type ReportMaterialValues = z.infer<typeof reportingMaterialSchema>;
 type ActionState = ActionFormState<ReportMaterialValues, void>;
 
-export async function handlingReportMaterial(prevState: ActionState, formData: FormData): Promise<ActionState> {
+export async function handlingReportMaterial(_prevState: ActionState, formData: FormData): Promise<ActionState> {
   const rawValues = {
     reason: formData.get("reason") as string,
     details: formData.get("details") as string,

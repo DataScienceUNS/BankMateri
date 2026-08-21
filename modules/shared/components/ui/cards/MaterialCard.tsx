@@ -2,7 +2,6 @@ import { MaterialCategoryLists } from "@/config/MaterialCategoryLists";
 import { SupportedCloudStorage } from "@/config/SupportedCloudStorage";
 import { Badge } from "@/modules/shadcn/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader } from "@/modules/shadcn/ui/card";
-import { useUser } from "@/providers/auth/auth-provider";
 import { Calendar, ExternalLink } from "lucide-react";
 import Link from "next/link";
 
@@ -39,7 +38,6 @@ const MaterialCard = ({
   // isBookmarked,
   // handleBookmarkClick,
 }: MaterialCardProps) => {
-  const user = useUser();
   const formattedDate = new Date(createdAt).toLocaleDateString("en-US", {
     month: "numeric",
     day: "numeric",
