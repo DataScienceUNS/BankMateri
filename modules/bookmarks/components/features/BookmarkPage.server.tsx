@@ -6,7 +6,7 @@ import BookmarkPageClient from "./BookmarkPage.client";
 
 const BookmarkPageServer = async () => {
   const userBookmarks = await getAllUserBookmark();
-  if (userBookmarks.status === 403) redirect("/login");
+  if (userBookmarks.status === 403) redirect("/auth/login");
   if (!userBookmarks.success) return <ErrorPage />;
   console.log("userBookmarks.data", userBookmarks);
 

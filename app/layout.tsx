@@ -17,12 +17,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = unwrap(await getCurrentUser());
+  const user = await getCurrentUser();
 
   return (
     <html lang="en">
       <FontProvider>
-        <AuthProvider user={user}>{children}</AuthProvider>
+        <AuthProvider user={user.success ? user.data : null}>{children}</AuthProvider>
         <Toaster />
       </FontProvider>
     </html>
