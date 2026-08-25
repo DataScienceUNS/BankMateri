@@ -6,6 +6,7 @@ import React from "react";
 import BookmarkEmptyCard from "../ui/BookmarkEmptyCard";
 import MaterialCard from "@/modules/shared/components/ui/cards/MaterialCard";
 import { formatDistanceToNow } from "date-fns";
+import HeaderPage from "@/modules/shared/components/typography/HeaderPage";
 
 type BookmarkPageClientProps = {
   bookmarks: {
@@ -50,14 +51,9 @@ const BookmarkPageClient = ({ bookmarks }: BookmarkPageClientProps) => {
     : [];
 
   return (
-    <div className="mt-10">
-      <header className="flex justify-between items-center">
-        <div>
-          <h1 className="text-[30px] text-neutral-800 font-semibold">Bookmarks</h1>
-          <h3 className="text-muted-foreground text-sm">You have {bookmarks.length} bookmarked resources.</h3>
-        </div>
-      </header>
-      <main className="mt-8">
+    <div>
+      <HeaderPage title="Bookmarks" subtitle={`You have ${bookmarks.length} bookmarked resources.`} />
+      <main>
         <InputGroup className="max-w-md py-5 px-1">
           <InputGroupInput
             className="ml-1"
