@@ -14,7 +14,16 @@ export const getAllUserBookmark = createAction(async () => {
       user_id: user.data?.user.id,
     },
     select: {
-      material: true,
+      material: {
+        include: {
+          subject: {
+            select: {
+              name: true,
+              code: true,
+            },
+          },
+        },
+      },
       saved_at: true,
     },
   });

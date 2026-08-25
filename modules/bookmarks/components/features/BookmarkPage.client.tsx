@@ -1,13 +1,20 @@
 "use client";
 import { Material_Type } from "@/app/generated/prisma";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/modules/shadcn/ui/input-group";
-import { Search } from "lucide-react";
+import { Bookmark, Calendar, Search } from "lucide-react";
 import React from "react";
 import BookmarkEmptyCard from "../ui/BookmarkEmptyCard";
+import MaterialCard from "@/modules/shared/components/ui/cards/MaterialCard";
+import { formatDistanceToNow } from "date-fns";
 
 type BookmarkPageClientProps = {
   bookmarks: {
     material: {
+      subject: {
+        code: string;
+        name: string;
+      };
+    } & {
       id: string;
       title: string;
       description: string | null;
@@ -45,18 +52,30 @@ const BookmarkPageClient = ({ bookmarks }: BookmarkPageClientProps) => {
             <Search />
           </InputGroupAddon>
         </InputGroup>
-        <div className="mt-5">
+        <div className="mt-6">
           {bookmarks.length === 0 ? (
             <BookmarkEmptyCard />
           ) : (
-            <ul>
+            <div className="grid grid-cols-3 gap-4">
               {bookmarks.map((bookmark) => (
-                <li key={bookmark.material.id}>
-                  <h4>{bookmark.material.title}</h4>
-                  <p>{bookmark.material.description}</p>
-                </li>
+                <MaterialCard
+                  key={bookmark.material.id}
+                  title={bookmark.material.title}
+                  description={bookmark.material.description ?? undefined}
+                  category={bookmark.material.category}
+                  meetingNo={bookmark.material.meeting_number ?? 0}
+                  source={bookmark.material.source}
+                  createdAt={bookmark.material.created_at}
+                  externalUrl={bookmark.material.content_url}
+                  id={bookmark.material.id}
+                  subjectName={bookmark.material.subject.name}
+                  subjectCode={bookmark.material.subject.code}
+                  academicYear={bookmark.material.academic_year}
+                  footerText={formatDistanceToNow(new Date(bookmark.saved_at), { addSuffix: true })}
+                  footerIcon={Bookmark}
+                />
               ))}
-            </ul>
+            </div>
           )}
         </div>
       </main>

@@ -2,7 +2,8 @@ import { MaterialCategoryLists } from "@/config/MaterialCategoryLists";
 import { SupportedCloudStorage } from "@/config/SupportedCloudStorage";
 import { Badge } from "@/modules/shadcn/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader } from "@/modules/shadcn/ui/card";
-import { Calendar, ExternalLink } from "lucide-react";
+import { Calendar, ExternalLink, LucideProps } from "lucide-react";
+import { ForwardRefExoticComponent, RefAttributes } from "react";
 import Link from "next/link";
 
 /**
@@ -14,12 +15,15 @@ interface MaterialCardProps {
   title: string;
   subjectName: string;
   subjectCode: string;
-  description: string;
+  description?: string;
   category: string;
   meetingNo: number;
   source: string;
+  academicYear: string;
   createdAt: Date;
   externalUrl: string;
+  footerIcon?: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>;
+  footerText?: string;
   // isBookmarked: boolean;
   // handleBookmarkClick: (materialId: string) => void | Promise<void>;
 }
@@ -33,17 +37,13 @@ const MaterialCard = ({
   category,
   meetingNo,
   source,
-  createdAt,
+  academicYear,
   externalUrl,
+  footerIcon: FooterIcon,
+  footerText,
   // isBookmarked,
   // handleBookmarkClick,
 }: MaterialCardProps) => {
-  const formattedDate = new Date(createdAt).toLocaleDateString("en-US", {
-    month: "numeric",
-    day: "numeric",
-    year: "numeric",
-  });
-
   return (
     <Card className="w-full max-w-94 py-5 gap-0">
       {/* Header */}
@@ -83,6 +83,7 @@ const MaterialCard = ({
           <Badge variant="secondary">{MaterialCategoryLists.find((c) => c.value === category)?.label}</Badge>
           <Badge variant="secondary">Meeting {meetingNo}</Badge>
           <Badge variant="secondary">{SupportedCloudStorage.find((s) => s.value === source)?.label}</Badge>
+          <Badge variant="secondary">{academicYear}</Badge>
         </div>
       </CardContent>
 
@@ -90,8 +91,8 @@ const MaterialCard = ({
       <CardFooter className="mt-4 mx-0 py-4 px-5">
         <div className="w-full flex items-center justify-between border-t border-gray-100">
           <div className="flex items-center gap-1.5 text-sm text-gray-500">
-            <Calendar className="h-4 w-4" />
-            <span className="text-xs">{formattedDate}</span>
+            {FooterIcon && <FooterIcon className="h-4 w-4" />}
+            <span className="text-xs">{footerText}</span>
           </div>
           <Link
             href={externalUrl}
