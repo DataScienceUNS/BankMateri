@@ -4,6 +4,7 @@ import FontProvider from "@/providers/fonts/Font.provider";
 import React from "react";
 import { AuthProvider } from "@/providers/auth/auth-provider";
 import { getCurrentUser } from "@/modules/auth/lib/getCurrentUser";
+import { unwrap } from "@/utils/actions/unwrap-action";
 import { Toaster } from "@/modules/shadcn/ui/sonner";
 
 export const metadata: Metadata = {
@@ -16,12 +17,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await getCurrentUser();
+  const user = unwrap(await getCurrentUser());
 
   return (
     <html lang="en">
       <FontProvider>
-        <AuthProvider user={user.success ? user.data : null}>{children}</AuthProvider>
+        <AuthProvider user={user}>{children}</AuthProvider>
         <Toaster />
       </FontProvider>
     </html>
