@@ -37,6 +37,18 @@ type BookmarkPageClientProps = {
 };
 
 const BookmarkPageClient = ({ bookmarks }: BookmarkPageClientProps) => {
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const filteredBookmarks = bookmarks
+    ? bookmarks.filter((bookmark) => {
+        return (
+          bookmark.material.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          bookmark.material.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          bookmark.material.subject.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          bookmark.material.subject.code.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      })
+    : [];
+
   return (
     <div className="mt-10">
       <header className="flex justify-between items-center">
@@ -47,17 +59,22 @@ const BookmarkPageClient = ({ bookmarks }: BookmarkPageClientProps) => {
       </header>
       <main className="mt-8">
         <InputGroup className="max-w-md py-5 px-1">
-          <InputGroupInput className="ml-1" placeholder="Search..." />
+          <InputGroupInput
+            className="ml-1"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
           <InputGroupAddon>
             <Search />
           </InputGroupAddon>
         </InputGroup>
         <div className="mt-6">
-          {bookmarks.length === 0 ? (
+          {filteredBookmarks.length === 0 ? (
             <BookmarkEmptyCard />
           ) : (
             <div className="grid grid-cols-3 gap-4">
-              {bookmarks.map((bookmark) => (
+              {filteredBookmarks.map((bookmark) => (
                 <MaterialCard
                   key={bookmark.material.id}
                   title={bookmark.material.title}

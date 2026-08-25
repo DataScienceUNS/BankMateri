@@ -26,5 +26,8 @@ export const getAllUserBookmark = createAction(async () => {
       },
       saved_at: true,
     },
+    orderBy: {
+      saved_at: "desc",
+    },
   });
 });
