@@ -2,18 +2,14 @@ import React from "react";
 import SubjectCard from "@/modules/shared/components/ui/cards/SubjectCard";
 import { getAllSubject } from "@/modules/subjects/overviewAll/actions/getAllSubject";
 import { unwrap } from "@/utils/actions/unwrap-action";
+import HeaderPage from "@/modules/shared/components/typography/HeaderPage";
 
 const SubjectPage = async () => {
   const response = unwrap(await getAllSubject());
 
   return (
-    <div className="mt-12">
-      <header className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-semibold">Subjects</h1>
-          <h3 className="text-neutral-500">Every course in the resource center</h3>
-        </div>
-      </header>
+    <div>
+      <HeaderPage title="Subjects" subtitle="Every course in the resource center" />
       <main className="mt-6 grid grid-cols-3 gap-4">
         {response.map((subject, index) => (
           <SubjectCard
