@@ -1,7 +1,7 @@
 "use client";
 import { Material_Type } from "@/app/generated/prisma";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/modules/shadcn/ui/input-group";
-import { Bookmark, Calendar, Search } from "lucide-react";
+import { Bookmark, Search } from "lucide-react";
 import React from "react";
 import BookmarkEmptyCard from "../ui/BookmarkEmptyCard";
 import MaterialCard from "@/modules/shared/components/ui/cards/MaterialCard";

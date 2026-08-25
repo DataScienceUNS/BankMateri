@@ -4,7 +4,7 @@ import { jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { createAction } from "@/utils/actions/create-action";
 import { UserJwtPayload } from "@/modules/shared/types/UserJwtPayload";
-import { AppError, UnauthorizedError } from "@/utils/errors/app-error";
+import { UnauthorizedError } from "@/utils/errors/app-error";
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 

@@ -4,7 +4,6 @@ import FontProvider from "@/providers/fonts/Font.provider";
 import React from "react";
 import { AuthProvider } from "@/providers/auth/auth-provider";
 import { getCurrentUser } from "@/modules/auth/lib/getCurrentUser";
-import { unwrap } from "@/utils/actions/unwrap-action";
 import { Toaster } from "@/modules/shadcn/ui/sonner";
 
 export const metadata: Metadata = {
