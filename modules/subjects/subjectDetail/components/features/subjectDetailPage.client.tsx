@@ -1,11 +1,10 @@
 "use client";
 import { Badge } from "@/modules/shadcn/ui/badge";
-import { ArrowLeft, BookOpen, Calendar } from "lucide-react";
+import { ArrowLeft, BookOpen } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import SearchAndFilter from "../ui/SearchAndFilter";
 import MaterialCard from "@/modules/shared/components/ui/cards/MaterialCard";
-import { formatDistanceToNow } from "date-fns";
 
 type SubjectDetailPageClientProps = {
   detail: {
@@ -92,11 +91,8 @@ const SubjectDetailPageClient = ({ detail }: SubjectDetailPageClientProps) => {
               category={material.category}
               meetingNo={material.meeting_number || 0}
               source={material.source}
-              academicYear={material.academic_year}
               createdAt={material.created_at}
               externalUrl={material.content_url}
-              footerText={formatDistanceToNow(new Date(material.created_at), { addSuffix: true })}
-              footerIcon={Calendar}
             />
           ))}
         </div>
