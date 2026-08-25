@@ -238,6 +238,7 @@ model MaterialReport {
 model Bookmark {
   user     User     @relation(fields: [user_id], references: [id])
   material Material @relation(fields: [material_id], references: [id])
+  saved_at DateTime @default(now()) @db.Timestamptz()
 
   user_id     String @db.Uuid
   material_id String @db.Uuid
