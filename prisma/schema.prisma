@@ -68,6 +68,7 @@ model User {
   created_material_report  MaterialReport[] @relation("ReportedMaterialReport")
   reviewed_material_report MaterialReport[] @relation("ReviewedMaterialReport")
   bookmarks                Bookmark[]
+  histories                History[]
 
   @@map("users")
 }
@@ -214,6 +215,7 @@ model Material {
   uploader_id   String           @db.Uuid
   report_card   MaterialReport[]
   bookmarked_by Bookmark[]
+  histories     History[]
 
   @@map("materials")
 }
@@ -245,4 +247,16 @@ model Bookmark {
 
   @@id([user_id, material_id])
   @@map("bookmarks")
+}
+
+model History {
+  user          User     @relation(fields: [user_id], references: [id])
+  material      Material @relation(fields: [material_id], references: [id])
+  last_accessed DateTime @default(now()) @db.Timestamptz()
+
+  user_id     String @db.Uuid
+  material_id String @db.Uuid
+
+  @@id([user_id, material_id])
+  @@map("histories")
 }
