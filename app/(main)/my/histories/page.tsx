@@ -1,7 +1,8 @@
+import { HistoryPageServer } from "@/modules/histories/components/features/HistoryPage.server";
 import React from "react";
 
 const page = () => {
-  return <div>Histories</div>;
+  return <HistoryPageServer />;
 };
 
 export default page;
