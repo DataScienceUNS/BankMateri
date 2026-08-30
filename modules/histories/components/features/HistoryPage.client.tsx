@@ -1,11 +1,11 @@
 "use client";
 import { Material_Type } from "@/app/generated/prisma";
+import { formatDistanceToNow } from "date-fns";
+import { RotateCcwClock } from "lucide-react";
+import HistoryEmptyCard from "../ui/HistoryEmptyCard";
+import MaterialCard from "@/modules/shared/components/ui/cards/MaterialCard";
 import HeaderPage from "@/modules/shared/components/typography/HeaderPage";
 import React from "react";
-import HistoryEmptyCard from "../ui/HistoryEmptyCard";
-import { formatDistanceToNow } from "date-fns";
-import MaterialCard from "@/modules/shared/components/ui/cards/MaterialCard";
-import { RotateCcwClock } from "lucide-react";
 
 type HistoryPageClientProps = {
   histories: {
